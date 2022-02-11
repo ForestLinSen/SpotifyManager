@@ -12,6 +12,8 @@
 		B92591D527B54E960019031E /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92591D427B54E960019031E /* HomeViewController.swift */; };
 		B92591DA27B54E970019031E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B92591D927B54E970019031E /* Assets.xcassets */; };
 		B92591DD27B54E970019031E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B92591DB27B54E970019031E /* LaunchScreen.storyboard */; };
+		B9576A0F27B61DF3006E49DB /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9576A0E27B61DF3006E49DB /* AuthManager.swift */; };
+		B9576A1127B6204B006E49DB /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9576A1027B6204B006E49DB /* WelcomeViewController.swift */; };
 		B9BA344727B557620001C99E /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BA344627B557620001C99E /* TabBarViewController.swift */; };
 		B9BA344B27B566430001C99E /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BA344A27B566430001C99E /* SearchViewController.swift */; };
 		B9BA344D27B566B90001C99E /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BA344C27B566B90001C99E /* LibraryViewController.swift */; };
@@ -25,6 +27,9 @@
 		B92591D927B54E970019031E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B92591DC27B54E970019031E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B92591DE27B54E970019031E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B9576A0E27B61DF3006E49DB /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
+		B9576A1027B6204B006E49DB /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		B9576A1427B63223006E49DB /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		B9BA344627B557620001C99E /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		B9BA344A27B566430001C99E /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		B9BA344C27B566B90001C99E /* LibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
@@ -78,6 +83,7 @@
 				B92591D027B54E960019031E /* AppDelegate.swift */,
 				B92591D227B54E960019031E /* SceneDelegate.swift */,
 				B92591D927B54E970019031E /* Assets.xcassets */,
+				B9576A1427B63223006E49DB /* Config.xcconfig */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -85,6 +91,7 @@
 		B92591E527B54EF30019031E /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				B9576A0E27B61DF3006E49DB /* AuthManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -133,6 +140,7 @@
 		B9BA344927B565120001C99E /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				B9576A1027B6204B006E49DB /* WelcomeViewController.swift */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -208,6 +216,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9BA344B27B566430001C99E /* SearchViewController.swift in Sources */,
+				B9576A1127B6204B006E49DB /* WelcomeViewController.swift in Sources */,
+				B9576A0F27B61DF3006E49DB /* AuthManager.swift in Sources */,
 				B9BA344727B557620001C99E /* TabBarViewController.swift in Sources */,
 				B92591D527B54E960019031E /* HomeViewController.swift in Sources */,
 				B92591D127B54E960019031E /* AppDelegate.swift in Sources */,
@@ -232,6 +242,7 @@
 /* Begin XCBuildConfiguration section */
 		B92591DF27B54E970019031E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B9576A1427B63223006E49DB /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
