@@ -9,12 +9,13 @@ import UIKit
 
 class WelcomeViewController: UIViewController {
     
-    private let loginButton: UIButton = {
+    private let signInButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Log In", for: .normal)
-        //button.setTitleColor(.systemRed, for: .normal)
-        button.backgroundColor = .systemBlue
+        button.setTitle("Sign in with Spotify", for: .normal)
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.backgroundColor = .white
         button.layer.cornerRadius = 8
+        button.addTarget(self, action: #selector(didTapSignInButton), for: .touchUpInside)
         return button
     }()
 
@@ -24,11 +25,8 @@ class WelcomeViewController: UIViewController {
         self.title = "Spotify"
         
         view.backgroundColor = .systemGreen
-        view.addSubview(loginButton)
+        view.addSubview(signInButton)
         print("Debug: welcome screen did load")
-        
-        let clientID = Bundle.main.infoDictionary?["CLIENT_ID"]
-        let clientSecret = Bundle.main.infoDictionary?["CLIENT_SECRET"]
         
     }
     
@@ -39,8 +37,23 @@ class WelcomeViewController: UIViewController {
         let height = view.frame.height
         let buttonWidth = width/1.4
         let buttonHeight = buttonWidth/6
-        loginButton.frame = CGRect(x: width/2 - buttonWidth/2, y: height - buttonHeight*2.2,
+        signInButton.frame = CGRect(x: width/2 - buttonWidth/2, y: height - buttonHeight*2.2,
                                    width: buttonWidth, height: buttonHeight)
+    }
+    
+    @objc func didTapSignInButton(){
+        print("Debug: sign in button tapped")
+        let vc = AuthViewController()
+        vc.completionHandler = {[weak self] success in
+            self?.handleSignIn(success: success)
+        }
+        
+        vc.navigationItem.largeTitleDisplayMode = .never
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func handleSignIn(success: Bool){
+        
     }
 
 }
