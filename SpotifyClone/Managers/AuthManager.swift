@@ -13,32 +13,162 @@ final class AuthManager{
     private init(){}
     
     var isSignedIn: Bool{
-        return false
+        return accessToken != nil
     }
     
     public var signinURL: URL?{
         // https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
         
-        let scope = "user-read-private"
+        let scope = K.scope
         let baseURL = "https://accounts.spotify.com/authorize?"
         let urlString = "\(baseURL)response_type=code&client_id=\(K.clientID)&scope=\(scope)&redirect_uri=\(K.redirectURI)&show_dialog=TRUE"
+        print("Debug: url string \(urlString)")
         return URL(string: urlString)
         
     }
     
     private var accessToken: String?{
-        return nil
+        return UserDefaults.standard.string(forKey: "access_token")
     }
     
     private var refreshToken: String?{
-        return nil
+        return UserDefaults.standard.string(forKey: "refresh_token")
     }
     
     private var tokenExpirationDate: Date?{
-        return nil
+        return UserDefaults.standard.object(forKey: "expirationDate") as? Date
     }
     
     private var shouldRefreshToken: Bool{
-        return false
+        guard let expirationDate = tokenExpirationDate else {
+            return false
+        }
+        
+        let currentData = Date()
+        let fiveMinutes: TimeInterval = 300
+        return currentData.addingTimeInterval(fiveMinutes) >= expirationDate
+
     }
+    
+
+    
+    /// Get token
+    public func exchangeCodeForToken(code: String, completion: @escaping ((Bool) -> Void)){
+        
+        guard let url = URL(string: K.tokenAPIURL) else { return }
+        
+        var components = URLComponents()
+        
+        // Each URLQueryItem represents a single key-value pair
+        // https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
+        // grant_type, code, redirect_uri
+        components.queryItems = [
+            URLQueryItem(name: "grant_type", value: "authorization_code"),
+            URLQueryItem(name: "code", value: code),
+            URLQueryItem(name: "redirect_uri", value: K.redirectURI)
+        ]
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.httpBody = components.query?.data(using: .utf8)
+        
+        let basicToken = "\(K.clientID):\(K.clientSecret)"
+        let data = basicToken.data(using: .utf8)
+        guard let base64String = data?.base64EncodedString() else {
+            print("Debug: cannot get base64")
+            completion(false)
+            return
+        }
+        request.setValue("Basic \(base64String)", forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) {[weak self] data, _, error in
+            guard let data = data, error == nil else {
+                completion(false)
+                return
+            }
+            
+            do{
+                //let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
+                
+                let result = try JSONDecoder().decode(AuthResponse.self, from: data)
+                self?.cacheToken(result: result)
+                print("Debug: json data: \(result)")
+                
+            }catch{
+                print("Debug: error serialization \(error.localizedDescription)")
+                completion(false)
+            }
+        }
+        
+        task.resume()
+    }
+    
+    
+    public func refreshTokenIfNeeded(completion: @escaping (Bool) -> Void){
+        
+        guard shouldRefreshToken, let refreshToken = self.refreshToken else {
+            completion(false)
+            return
+        }
+        
+        
+        guard let url = URL(string: K.tokenAPIURL) else { return }
+        
+        var components = URLComponents()
+        
+        // Each URLQueryItem represents a single key-value pair
+        // https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
+        // grant_type, code, redirect_uri
+        components.queryItems = [
+            URLQueryItem(name: "grant_type", value: "refresh_token"),
+            URLQueryItem(name: "refresh_token", value: refreshToken)
+        ]
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.httpBody = components.query?.data(using: .utf8)
+        
+        let basicToken = "\(K.clientID):\(K.clientSecret)"
+        let data = basicToken.data(using: .utf8)
+        guard let base64String = data?.base64EncodedString() else {
+            print("Debug: cannot get base64")
+            completion(false)
+            return
+        }
+        request.setValue("Basic \(base64String)", forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) {[weak self] data, _, error in
+            guard let data = data, error == nil else {
+                completion(false)
+                return
+            }
+            
+            do{
+                //let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
+                
+                let result = try JSONDecoder().decode(AuthResponse.self, from: data)
+                self?.cacheToken(result: result)
+                print("Debug: refreshTokenIfNeeded json data: \(result)")
+                
+            }catch{
+                print("Debug: refreshTokenIfNeeded error serialization \(error.localizedDescription)")
+                completion(false)
+            }
+        }
+        
+        task.resume()
+    }
+    
+    public func cacheToken(result: AuthResponse){
+        UserDefaults.standard.set(result.access_token, forKey: "access_token")
+        
+        if let refreshToken = refreshToken {
+            UserDefaults.standard.set(refreshToken, forKey: "refresh_token")
+        }
+
+        UserDefaults.standard.set(Date().addingTimeInterval(TimeInterval(result.expires_in)), forKey: "expirationDate")
+    }
+
 }

@@ -13,6 +13,7 @@
 		B92591DA27B54E970019031E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B92591D927B54E970019031E /* Assets.xcassets */; };
 		B92591DD27B54E970019031E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B92591DB27B54E970019031E /* LaunchScreen.storyboard */; };
 		B940ECFB27B7694B006B3332 /* K.swift in Sources */ = {isa = PBXBuildFile; fileRef = B940ECFA27B7694B006B3332 /* K.swift */; };
+		B940ECFE27B96AC0006B3332 /* AuthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B940ECFD27B96AC0006B3332 /* AuthResponse.swift */; };
 		B9576A0F27B61DF3006E49DB /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9576A0E27B61DF3006E49DB /* AuthManager.swift */; };
 		B9576A1127B6204B006E49DB /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9576A1027B6204B006E49DB /* WelcomeViewController.swift */; };
 		B9576A1627B63D6E006E49DB /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9576A1527B63D6E006E49DB /* AuthViewController.swift */; };
@@ -30,6 +31,7 @@
 		B92591DC27B54E970019031E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B92591DE27B54E970019031E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B940ECFA27B7694B006B3332 /* K.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = K.swift; sourceTree = "<group>"; };
+		B940ECFD27B96AC0006B3332 /* AuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResponse.swift; sourceTree = "<group>"; };
 		B9576A0E27B61DF3006E49DB /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		B9576A1027B6204B006E49DB /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		B9576A1427B63223006E49DB /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
@@ -69,6 +71,7 @@
 		B92591CF27B54E960019031E /* SpotifyClone */ = {
 			isa = PBXGroup;
 			children = (
+				B940ECFC27B96AA8006B3332 /* Models */,
 				B92591E927B54F1A0019031E /* Products */,
 				B92591E827B54F130019031E /* Controllers */,
 				B92591E727B54F090019031E /* Views */,
@@ -129,6 +132,14 @@
 			children = (
 			);
 			path = Products;
+			sourceTree = "<group>";
+		};
+		B940ECFC27B96AA8006B3332 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B940ECFD27B96AC0006B3332 /* AuthResponse.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		B9BA344827B565090001C99E /* Core */ = {
@@ -229,6 +240,7 @@
 				B92591D527B54E960019031E /* HomeViewController.swift in Sources */,
 				B92591D127B54E960019031E /* AppDelegate.swift in Sources */,
 				B9BA344D27B566B90001C99E /* LibraryViewController.swift in Sources */,
+				B940ECFE27B96AC0006B3332 /* AuthResponse.swift in Sources */,
 				B9576A1627B63D6E006E49DB /* AuthViewController.swift in Sources */,
 				B92591D327B54E960019031E /* SceneDelegate.swift in Sources */,
 			);

@@ -27,7 +27,7 @@ class WelcomeViewController: UIViewController {
         view.backgroundColor = .systemGreen
         view.addSubview(signInButton)
         print("Debug: welcome screen did load")
-        
+
     }
     
     override func viewDidLayoutSubviews() {
@@ -53,7 +53,18 @@ class WelcomeViewController: UIViewController {
     }
     
     func handleSignIn(success: Bool){
+        guard success else {
+            let alert = UIAlertController(title: "Oops",
+                                          message: "Something went wrong when signin",
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel))
+            present(alert, animated: true)
+            return
+        }
         
+        let mainAppTabBarVC = TabBarViewController()
+        mainAppTabBarVC.modalPresentationStyle = .fullScreen
+        present(mainAppTabBarVC, animated: true)
     }
 
 }

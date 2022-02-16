@@ -17,8 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         let window = UIWindow(frame: UIScreen.main.bounds)
-        print("Debug: auth url: \(AuthManager.shared.signinURL)")
-        
+
         // check if the user is logged in
         if AuthManager.shared.isSignedIn {
             window.rootViewController = TabBarViewController()
@@ -31,6 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window.makeKeyAndVisible()
         self.window = window
+        
         
         return true
     }
