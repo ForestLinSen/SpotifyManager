@@ -20,6 +20,8 @@
 		B9BA344727B557620001C99E /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BA344627B557620001C99E /* TabBarViewController.swift */; };
 		B9BA344B27B566430001C99E /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BA344A27B566430001C99E /* SearchViewController.swift */; };
 		B9BA344D27B566B90001C99E /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BA344C27B566B90001C99E /* LibraryViewController.swift */; };
+		B9C53F9B27BE06C400E4644A /* APICaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C53F9A27BE06C400E4644A /* APICaller.swift */; };
+		B9C53F9D27BE087D00E4644A /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C53F9C27BE087D00E4644A /* UserProfile.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +41,8 @@
 		B9BA344627B557620001C99E /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		B9BA344A27B566430001C99E /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		B9BA344C27B566B90001C99E /* LibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
+		B9C53F9A27BE06C400E4644A /* APICaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICaller.swift; sourceTree = "<group>"; };
+		B9C53F9C27BE087D00E4644A /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				B9576A0E27B61DF3006E49DB /* AuthManager.swift */,
+				B9C53F9A27BE06C400E4644A /* APICaller.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -138,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				B940ECFD27B96AC0006B3332 /* AuthResponse.swift */,
+				B9C53F9C27BE087D00E4644A /* UserProfile.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -239,10 +245,12 @@
 				B9BA344727B557620001C99E /* TabBarViewController.swift in Sources */,
 				B92591D527B54E960019031E /* HomeViewController.swift in Sources */,
 				B92591D127B54E960019031E /* AppDelegate.swift in Sources */,
+				B9C53F9B27BE06C400E4644A /* APICaller.swift in Sources */,
 				B9BA344D27B566B90001C99E /* LibraryViewController.swift in Sources */,
 				B940ECFE27B96AC0006B3332 /* AuthResponse.swift in Sources */,
 				B9576A1627B63D6E006E49DB /* AuthViewController.swift in Sources */,
 				B92591D327B54E960019031E /* SceneDelegate.swift in Sources */,
+				B9C53F9D27BE087D00E4644A /* UserProfile.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

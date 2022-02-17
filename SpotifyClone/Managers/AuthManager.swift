@@ -10,6 +10,8 @@ import Foundation
 final class AuthManager{
     static let shared = AuthManager()
     
+    private var refreshingToken = false
+    
     private init(){}
     
     var isSignedIn: Bool{
@@ -105,7 +107,29 @@ final class AuthManager{
     }
     
     
+    private var onRefreshBlocks = [(String) -> Void]()
+    
+    public func withValideToken(completion: @escaping (String) -> Void){
+        guard !refreshingToken else {
+            onRefreshBlocks.append(completion)
+            return
+        }
+        
+        if shouldRefreshToken{
+            refreshTokenIfNeeded { [weak self] success in
+                if let token = self?.accessToken, success{
+                    completion(token)
+                }
+            }
+        }else if let token = accessToken{
+            completion(token)
+        }
+    }
+    
+    
     public func refreshTokenIfNeeded(completion: @escaping (Bool) -> Void){
+        // make sure we are not in the process of refreshing token
+        guard !refreshingToken else { return }
         
         guard shouldRefreshToken, let refreshToken = self.refreshToken else {
             completion(false)
@@ -114,6 +138,9 @@ final class AuthManager{
         
         
         guard let url = URL(string: K.tokenAPIURL) else { return }
+        
+        // begin to refresh token
+        self.refreshingToken = true
         
         var components = URLComponents()
         
@@ -150,6 +177,9 @@ final class AuthManager{
                 
                 let result = try JSONDecoder().decode(AuthResponse.self, from: data)
                 self?.cacheToken(result: result)
+                self?.refreshingToken = false
+                self?.onRefreshBlocks.forEach{$0(result.access_token)}
+                self?.onRefreshBlocks.removeAll()
                 print("Debug: refreshTokenIfNeeded json data: \(result)")
                 
             }catch{
@@ -157,6 +187,7 @@ final class AuthManager{
                 completion(false)
             }
         }
+        
         
         task.resume()
     }
