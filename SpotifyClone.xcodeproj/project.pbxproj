@@ -14,6 +14,7 @@
 		B92591DD27B54E970019031E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B92591DB27B54E970019031E /* LaunchScreen.storyboard */; };
 		B940ECFB27B7694B006B3332 /* K.swift in Sources */ = {isa = PBXBuildFile; fileRef = B940ECFA27B7694B006B3332 /* K.swift */; };
 		B940ECFE27B96AC0006B3332 /* AuthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B940ECFD27B96AC0006B3332 /* AuthResponse.swift */; };
+		B953164427BF5DB400C260DD /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B953164327BF5DB400C260DD /* ProfileViewController.swift */; };
 		B9576A0F27B61DF3006E49DB /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9576A0E27B61DF3006E49DB /* AuthManager.swift */; };
 		B9576A1127B6204B006E49DB /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9576A1027B6204B006E49DB /* WelcomeViewController.swift */; };
 		B9576A1627B63D6E006E49DB /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9576A1527B63D6E006E49DB /* AuthViewController.swift */; };
@@ -34,6 +35,7 @@
 		B92591DE27B54E970019031E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B940ECFA27B7694B006B3332 /* K.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = K.swift; sourceTree = "<group>"; };
 		B940ECFD27B96AC0006B3332 /* AuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResponse.swift; sourceTree = "<group>"; };
+		B953164327BF5DB400C260DD /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		B9576A0E27B61DF3006E49DB /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		B9576A1027B6204B006E49DB /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		B9576A1427B63223006E49DB /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 			children = (
 				B9576A1027B6204B006E49DB /* WelcomeViewController.swift */,
 				B9576A1527B63D6E006E49DB /* AuthViewController.swift */,
+				B953164327BF5DB400C260DD /* ProfileViewController.swift */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -242,6 +245,7 @@
 				B940ECFB27B7694B006B3332 /* K.swift in Sources */,
 				B9576A1127B6204B006E49DB /* WelcomeViewController.swift in Sources */,
 				B9576A0F27B61DF3006E49DB /* AuthManager.swift in Sources */,
+				B953164427BF5DB400C260DD /* ProfileViewController.swift in Sources */,
 				B9BA344727B557620001C99E /* TabBarViewController.swift in Sources */,
 				B92591D527B54E960019031E /* HomeViewController.swift in Sources */,
 				B92591D127B54E960019031E /* AppDelegate.swift in Sources */,

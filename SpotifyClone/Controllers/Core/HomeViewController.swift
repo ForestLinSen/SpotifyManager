@@ -12,7 +12,18 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Home"
-        view.backgroundColor = .systemGreen
+        view.backgroundColor = .systemBackground
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gear"),
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(didTapSettings))
+    }
+    
+    @objc func didTapSettings(){
+        let vc = ProfileViewController()
+        vc.title = "Profile"
+        vc.navigationItem.largeTitleDisplayMode = .never
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 
 

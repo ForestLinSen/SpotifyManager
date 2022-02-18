@@ -117,11 +117,13 @@ final class AuthManager{
         
         if shouldRefreshToken{
             refreshTokenIfNeeded { [weak self] success in
+                
                 if let token = self?.accessToken, success{
                     completion(token)
                 }
             }
         }else if let token = accessToken{
+            
             completion(token)
         }
     }
@@ -132,9 +134,12 @@ final class AuthManager{
         guard !refreshingToken else { return }
         
         guard shouldRefreshToken, let refreshToken = self.refreshToken else {
+            print("Debug: refresh token \(self.refreshToken)")
             completion(false)
             return
         }
+        
+        
         
         
         guard let url = URL(string: K.tokenAPIURL) else { return }
