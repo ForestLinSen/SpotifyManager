@@ -17,14 +17,20 @@ final class APICaller{
         createRequest(with: URL(string: K.baseAPIURL + "/me"), type: .GET) { request in
             let task = URLSession.shared.dataTask(with: request) { data, _, error in
                 guard let data = data, error == nil else {
+                    print("Debug: cannot decode user profile")
                     completion(.failure(APIError.failedToGetData))
                     return
                 }
                 
                 do{
-                    let jsonData = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
-                    print("Debug: json data of user profile \(jsonData)")
-                }catch{}
+//                     let jsonData = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
+//                     print("Debug: json data of user profile \(jsonData)")
+//                    print("Debug: begin to convert user profile")
+                    let profile = try JSONDecoder().decode(UserProfile.self, from: data)
+                    print("Debug: user profile data model: \(profile)")
+                }catch{
+                    print("Cannot convert user profile model: \(error)")
+                }
             }
             
             task.resume()

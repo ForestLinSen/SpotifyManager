@@ -139,9 +139,6 @@ final class AuthManager{
             return
         }
         
-        
-        
-        
         guard let url = URL(string: K.tokenAPIURL) else { return }
         
         // begin to refresh token
@@ -200,7 +197,7 @@ final class AuthManager{
     public func cacheToken(result: AuthResponse){
         UserDefaults.standard.set(result.access_token, forKey: "access_token")
         
-        if let refreshToken = refreshToken {
+        if let refreshToken = result.refresh_token {
             UserDefaults.standard.set(refreshToken, forKey: "refresh_token")
         }
 
