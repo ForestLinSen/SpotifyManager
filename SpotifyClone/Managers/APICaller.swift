@@ -28,6 +28,7 @@ final class APICaller{
 //                    print("Debug: begin to convert user profile")
                     let profile = try JSONDecoder().decode(UserProfile.self, from: data)
                     print("Debug: user profile data model: \(profile)")
+                    completion(.success(profile))
                 }catch{
                     print("Cannot convert user profile model: \(error)")
                 }

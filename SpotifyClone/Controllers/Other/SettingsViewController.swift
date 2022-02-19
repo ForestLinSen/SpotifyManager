@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class SettingsViewController: UIViewController {
     
@@ -44,6 +45,7 @@ class SettingsViewController: UIViewController {
         })]))
     }
     
+    
     private func viewProfile(){
         let vc = ProfileViewController()
         vc.title = "Profile"
@@ -79,5 +81,9 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         sections[indexPath.section].options[indexPath.row].handler()
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return sections[section].title
     }
 }
