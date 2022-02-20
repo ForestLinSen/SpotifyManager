@@ -24,7 +24,6 @@ final class AuthManager{
         let scope = K.scope
         let baseURL = "https://accounts.spotify.com/authorize?"
         let urlString = "\(baseURL)response_type=code&client_id=\(K.clientID)&scope=\(scope)&redirect_uri=\(K.redirectURI)&show_dialog=TRUE"
-        print("Debug: url string \(urlString)")
         return URL(string: urlString)
         
     }
@@ -96,6 +95,7 @@ final class AuthManager{
                 let result = try JSONDecoder().decode(AuthResponse.self, from: data)
                 self?.cacheToken(result: result)
                 print("Debug: json data: \(result)")
+                completion(true)
                 
             }catch{
                 print("Debug: error serialization \(error.localizedDescription)")

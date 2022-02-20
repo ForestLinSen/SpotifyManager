@@ -9,9 +9,7 @@ import UIKit
 import WebKit
 
 class AuthViewController: UIViewController, WKNavigationDelegate {
-    
-    
-    
+
     private let webView: WKWebView = {
         // prefs and config
         let prefs = WKWebpagePreferences()
@@ -48,11 +46,19 @@ class AuthViewController: UIViewController, WKNavigationDelegate {
             return
         }
         
-        AuthManager.shared.exchangeCodeForToken(code: code) { success in
+        webView.isHidden = true
+        
+        AuthManager.shared.exchangeCodeForToken(code: code) {[weak self] success in
             
+            print("Debug: exchange code for token: \(success)")
+            
+            DispatchQueue.main.async {
+                self?.navigationController?.popToRootViewController(animated: true)
+                self?.completionHandler?(success)
+            }
         }
         
-        print("Debug: spotify auth code: \(code)")
+        print("Debug: spotify auth url: \(url)")
     }
     
     
