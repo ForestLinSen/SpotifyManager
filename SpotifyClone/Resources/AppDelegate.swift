@@ -20,6 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // check if the user is logged in
         if AuthManager.shared.isSignedIn {
+            AuthManager.shared.refreshTokenIfNeeded { _ in
+                
+            }
             window.rootViewController = TabBarViewController()
         }else{
             let nav = UINavigationController(rootViewController: WelcomeViewController())
