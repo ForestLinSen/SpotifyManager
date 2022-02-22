@@ -17,6 +17,10 @@ class HomeViewController: UIViewController {
                                                             style: .plain,
                                                             target: self,
                                                             action: #selector(didTapSettings))
+        
+        APICaller.shared.getReleases { result in
+            
+        }
     }
     
     @objc func didTapSettings(){

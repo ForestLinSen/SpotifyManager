@@ -38,6 +38,37 @@ final class APICaller{
         }
     }
     
+    public func getReleases(completion: @escaping (Result<NewReleasesResponse, Error>) -> Void){
+        
+        let requestString = K.baseAPIURL + "/browse/new-releases?limit=2"
+        
+        createRequest(with: URL(string: requestString), type: .GET) { request in
+            let dataTask = URLSession.shared.dataTask(with: request) { data, _, error in
+                guard let data = data, error == nil else {
+                    completion(.failure(APIError.failedToGetData))
+                    return
+                }
+                
+                do{
+//                    let jsonData = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
+//                    print("Debug: new releases response \(jsonData)")
+//
+                    let releases = try JSONDecoder().decode(NewReleasesResponse.self, from: data)
+                    print("Debug: new releases response \(releases)")
+                    
+                    completion(.success(releases))
+                    
+                }catch{
+                    completion(.failure(APIError.failedToGetData))
+                    print("Debug: release response error: \(error)")
+                }
+                
+            }
+            
+            dataTask.resume()
+        }
+    }
+    
     
     // MARK: - Private
     enum HTTPMethod: String{
