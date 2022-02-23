@@ -18,7 +18,7 @@ class HomeViewController: UIViewController {
                                                             target: self,
                                                             action: #selector(didTapSettings))
         
-        APICaller.shared.getReleases { result in
+        APICaller.shared.getFeaturedPlaylists { _ in
             
         }
     }

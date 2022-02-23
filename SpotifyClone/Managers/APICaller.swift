@@ -50,11 +50,7 @@ final class APICaller{
                 }
                 
                 do{
-//                    let jsonData = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
-//                    print("Debug: new releases response \(jsonData)")
-//
                     let releases = try JSONDecoder().decode(NewReleasesResponse.self, from: data)
-                    print("Debug: new releases response \(releases)")
                     
                     completion(.success(releases))
                     
@@ -66,6 +62,36 @@ final class APICaller{
             }
             
             dataTask.resume()
+        }
+    }
+    
+    
+    public func getFeaturedPlaylists(completion: @escaping (Result<FeaturedPlaylistsResponse, Error>) -> Void){
+        let requestString = K.baseAPIURL + "/browse/featured-playlists?limit=2"
+        createRequest(with: URL(string: requestString), type: .GET) { request in
+            let task = URLSession.shared.dataTask(with: request) { data, _, error in
+                guard let data = data, error == nil else {
+                    completion(.failure(APIError.failedToGetData))
+                    return
+                }
+                
+                do{
+//                    let jsonData = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
+//                    print("Debug: featured playlists: \(jsonData)")
+                    
+                    let featuredReleases = try JSONDecoder().decode(FeaturedPlaylistsResponse.self, from: data)
+                    print("Debug: Featured releases: \(featuredReleases)")
+                    
+                    completion(.success(featuredReleases))
+                    
+                }catch{
+                    print("Debug: cannot fetch featured releases: \(error)")
+                    completion(.failure(APIError.failedToGetData))
+                }
+            }
+            
+            task.resume()
+            
         }
     }
     

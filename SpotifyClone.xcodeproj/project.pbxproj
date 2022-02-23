@@ -27,6 +27,7 @@
 		B9C53F9D27BE087D00E4644A /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C53F9C27BE087D00E4644A /* UserProfile.swift */; };
 		B9E8A55627C4D15A0051D9D5 /* NewReleasesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E8A55527C4D15A0051D9D5 /* NewReleasesResponse.swift */; };
 		B9E8A55827C4EFBF0051D9D5 /* APIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E8A55727C4EFBF0051D9D5 /* APIImage.swift */; };
+		B9E8A55A27C53B750051D9D5 /* FeaturedPlaylistsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E8A55927C53B750051D9D5 /* FeaturedPlaylistsResponse.swift */; };
 		B9FBDEF827C1FD6F003B0244 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9FBDEF727C1FD6F003B0244 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +54,7 @@
 		B9C53F9C27BE087D00E4644A /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		B9E8A55527C4D15A0051D9D5 /* NewReleasesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewReleasesResponse.swift; sourceTree = "<group>"; };
 		B9E8A55727C4EFBF0051D9D5 /* APIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIImage.swift; sourceTree = "<group>"; };
+		B9E8A55927C53B750051D9D5 /* FeaturedPlaylistsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedPlaylistsResponse.swift; sourceTree = "<group>"; };
 		B9FBDEF727C1FD6F003B0244 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = assets/AppIcons/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -159,6 +161,7 @@
 				B99A181B27C0BA570015BFFE /* SettingsModels.swift */,
 				B9E8A55527C4D15A0051D9D5 /* NewReleasesResponse.swift */,
 				B9E8A55727C4EFBF0051D9D5 /* APIImage.swift */,
+				B9E8A55927C53B750051D9D5 /* FeaturedPlaylistsResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -265,6 +268,7 @@
 				B940ECFB27B7694B006B3332 /* K.swift in Sources */,
 				B9576A1127B6204B006E49DB /* WelcomeViewController.swift in Sources */,
 				B9576A0F27B61DF3006E49DB /* AuthManager.swift in Sources */,
+				B9E8A55A27C53B750051D9D5 /* FeaturedPlaylistsResponse.swift in Sources */,
 				B99A181C27C0BA570015BFFE /* SettingsModels.swift in Sources */,
 				B953164427BF5DB400C260DD /* ProfileViewController.swift in Sources */,
 				B9BA344727B557620001C99E /* TabBarViewController.swift in Sources */,
