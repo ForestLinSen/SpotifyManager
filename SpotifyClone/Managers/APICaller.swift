@@ -96,6 +96,31 @@ final class APICaller{
     }
     
     
+    public func getGenres(completion: @escaping (Result<Genres, Error>) -> Void){
+        let requestString = K.baseAPIURL + "/recommendations/available-genre-seeds"
+        
+        createRequest(with: URL(string: requestString), type: .GET) { request in
+            let task = URLSession.shared.dataTask(with: request) { data, _, error in
+                guard let data = data, error == nil else {
+                    completion(.failure(APIError.failedToGetData))
+                    return
+                }
+                
+                do{
+       
+                    let genres = try JSONDecoder().decode(Genres.self, from: data)
+                    print("Debug: genres: \(genres)")
+                    completion(.success(genres))
+                    
+                }catch{}
+
+            }
+            
+            task.resume()
+        }
+    }
+    
+    
     // MARK: - Private
     enum HTTPMethod: String{
         case GET

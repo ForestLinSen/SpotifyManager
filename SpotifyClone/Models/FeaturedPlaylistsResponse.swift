@@ -36,8 +36,6 @@ struct User: Codable{
     let href: String
     let type: String
     let uri: String
-
-    
 }
 
 struct Tracks: Codable{

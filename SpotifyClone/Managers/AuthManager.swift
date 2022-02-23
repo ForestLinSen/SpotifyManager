@@ -182,7 +182,6 @@ final class AuthManager{
                 self?.refreshingToken = false
                 self?.onRefreshBlocks.forEach{$0(result.access_token)}
                 self?.onRefreshBlocks.removeAll()
-                print("Debug: refreshTokenIfNeeded json data: \(result)")
                 
             }catch{
                 print("Debug: refreshTokenIfNeeded error serialization \(error.localizedDescription)")

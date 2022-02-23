@@ -8,7 +8,7 @@
 import UIKit
 
 class HomeViewController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Home"
@@ -18,10 +18,11 @@ class HomeViewController: UIViewController {
                                                             target: self,
                                                             action: #selector(didTapSettings))
         
-        APICaller.shared.getFeaturedPlaylists { _ in
+        APICaller.shared.getGenres { _ in
             
         }
     }
+    
     
     @objc func didTapSettings(){
         let vc = SettingsViewController()
@@ -29,7 +30,7 @@ class HomeViewController: UIViewController {
         vc.navigationItem.largeTitleDisplayMode = .never
         self.navigationController?.pushViewController(vc, animated: true)
     }
-
-
 }
+
+
 
