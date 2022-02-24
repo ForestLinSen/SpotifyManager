@@ -80,8 +80,6 @@ final class APICaller{
 //                    print("Debug: featured playlists: \(jsonData)")
                     
                     let featuredReleases = try JSONDecoder().decode(FeaturedPlaylistsResponse.self, from: data)
-                    print("Debug: Featured releases: \(featuredReleases)")
-                    
                     completion(.success(featuredReleases))
                     
                 }catch{
@@ -92,6 +90,49 @@ final class APICaller{
             
             task.resume()
             
+        }
+    }
+    
+    public func getRecommendation(completion: @escaping (Result<RecommendationResponse, Error>) -> Void){
+        getGenres {[weak self] result in
+            switch result{
+            case .success(let genres ):
+                var genreSeed = Set<String>()
+                
+                while(genreSeed.count < 5){
+                    if let genre = genres.genres.randomElement(){
+                        genreSeed.insert(genre)
+                    }
+                }
+                
+                let genresString = genreSeed.joined(separator: ",")
+                
+                let recommendationString = K.baseAPIURL + "/recommendations?limit=2&seed_genres=\(genresString)"
+                print("Debug: recommendation url: \(recommendationString)")
+                self?.createRequest(with: URL(string: recommendationString), type: .GET) { request in
+                    let task = URLSession.shared.dataTask(with: request) { data, _, error in
+                        guard let data = data, error == nil else{
+                            completion(.failure(APIError.failedToGetData))
+                            print("Debug: error getting recommendation: \(error)")
+                            return
+                        }
+                        
+                        do{
+                            let recommendation = try JSONDecoder().decode(RecommendationResponse.self, from: data)
+                            print("Debug: recommendation \(recommendation)")
+                            
+                            completion(.success(recommendation))
+                        }catch{}
+                        
+                        
+                    }
+                    task.resume()
+                }
+                
+                
+            case .failure(_):
+                break
+            }
         }
     }
     
@@ -109,7 +150,6 @@ final class APICaller{
                 do{
        
                     let genres = try JSONDecoder().decode(Genres.self, from: data)
-                    print("Debug: genres: \(genres)")
                     completion(.success(genres))
                     
                 }catch{}

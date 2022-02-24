@@ -18,7 +18,7 @@ class HomeViewController: UIViewController {
                                                             target: self,
                                                             action: #selector(didTapSettings))
         
-        APICaller.shared.getGenres { _ in
+        APICaller.shared.getRecommendation { _ in
             
         }
     }
