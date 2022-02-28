@@ -40,7 +40,7 @@ final class APICaller{
     
     public func getReleases(completion: @escaping (Result<NewReleasesResponse, Error>) -> Void){
         
-        let requestString = K.baseAPIURL + "/browse/new-releases?limit=2"
+        let requestString = K.baseAPIURL + "/browse/new-releases?limit=10"
         
         createRequest(with: URL(string: requestString), type: .GET) { request in
             let dataTask = URLSession.shared.dataTask(with: request) { data, _, error in
@@ -67,7 +67,7 @@ final class APICaller{
     
     
     public func getFeaturedPlaylists(completion: @escaping (Result<FeaturedPlaylistsResponse, Error>) -> Void){
-        let requestString = K.baseAPIURL + "/browse/featured-playlists?limit=2"
+        let requestString = K.baseAPIURL + "/browse/featured-playlists?limit=10"
         createRequest(with: URL(string: requestString), type: .GET) { request in
             let task = URLSession.shared.dataTask(with: request) { data, _, error in
                 guard let data = data, error == nil else {
@@ -107,7 +107,7 @@ final class APICaller{
                 
                 let genresString = genreSeed.joined(separator: ",")
                 
-                let recommendationString = K.baseAPIURL + "/recommendations?limit=2&seed_genres=\(genresString)"
+                let recommendationString = K.baseAPIURL + "/recommendations?limit=10&seed_genres=\(genresString)"
                 //print("Debug: recommendation url: \(recommendationString)")
                 self?.createRequest(with: URL(string: recommendationString), type: .GET) { request in
                     let task = URLSession.shared.dataTask(with: request) { data, _, error in
