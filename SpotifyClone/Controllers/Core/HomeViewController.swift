@@ -123,7 +123,11 @@ class HomeViewController: UIViewController{
                                             artistName: $0.artists.first?.name ?? "Unknown")
         })))
         
-        sections.append(.featuredPlaylists(viewModels: []))
+        sections.append(.featuredPlaylists(viewModels: playlists.compactMap({
+            return FeaturePlaylistCellViewModel(name: $0.name,
+                                                imageURL: URL(string: $0.images.first?.url ?? ""),
+                                                creatorName: $0.owner.display_name)
+        })))
         sections.append(.recommendedTracks(viewModels: []))
         
         collectionView.reloadData()
@@ -166,7 +170,7 @@ class HomeViewController: UIViewController{
             // Item
             let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalHeight(1)))
+                heightDimension: .fractionalHeight(1.0)))
             
             item.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
             
@@ -281,7 +285,6 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             
         case .newReleases(viewModels: let viewModels):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewReleaseCollectionViewCell.identifier, for: indexPath) as? NewReleaseCollectionViewCell else {
-                
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
                 return cell
             }
@@ -292,9 +295,21 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
 
             return cell
         case .featuredPlaylists(viewModels: let viewModels):
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FeaturePlaylistCollectionViewCell.identifier, for: indexPath)
-            cell.backgroundColor = .systemBlue
+            
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FeaturePlaylistCollectionViewCell.identifier, for: indexPath) as? FeaturePlaylistCollectionViewCell else {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FeaturePlaylistCollectionViewCell.identifier, for: indexPath)
+                cell.backgroundColor = .systemBlue
+                return cell
+            }
+            
+            let viewModel = viewModels[indexPath.row]
+            cell.configure(with: viewModel)
+            
+            //cell.backgroundColor = .systemGray
+            
             return cell
+            
+            
         case .recommendedTracks(viewModels: let viewModels):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendedTrackCollectionViewCell.identifier, for: indexPath)
             cell.backgroundColor = .systemMint

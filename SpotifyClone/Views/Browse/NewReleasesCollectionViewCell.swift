@@ -59,31 +59,30 @@ class NewReleaseCollectionViewCell: UICollectionViewCell{
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        albumNameLabel.sizeToFit()
-        artistNameLabel.sizeToFit()
-        numberOfTracksLabel.sizeToFit()
         contentView.clipsToBounds = true
         
         let imageSize = contentView.frame.height - 10
+        let labelHeight = contentView.frame.height / 5
+        
         imageView.frame = CGRect(x: 0, y: 0, width: imageSize, height: imageSize)
         
         albumNameLabel.frame = CGRect(x: imageView.frame.width + imageView.frame.origin.x + 10,
                                       y: 10,
                                       width: contentView.frame.width - imageSize,
-                                      height: contentView.frame.height / 4)
-        albumNameLabel.backgroundColor = .systemRed
+                                      height: labelHeight)
+        //albumNameLabel.backgroundColor = .systemRed
         
         artistNameLabel.frame = CGRect(x: imageView.frame.width + imageView.frame.origin.x + 10,
                                        y: albumNameLabel.frame.origin.y + albumNameLabel.frame.height,
                                        width:  contentView.frame.width - imageSize,
-                                       height: contentView.frame.height / 4)
-        artistNameLabel.backgroundColor = .systemBlue
+                                       height: labelHeight)
+        //artistNameLabel.backgroundColor = .systemBlue
         
         numberOfTracksLabel.frame = CGRect(x: imageView.frame.width + imageView.frame.origin.x + 10,
-                                           y: artistNameLabel.frame.origin.y + artistNameLabel.frame.height,
+                                           y: contentView.frame.height - labelHeight*1.5,
                                            width:  contentView.frame.width - imageSize,
-                                           height: contentView.frame.height / 4)
-        numberOfTracksLabel.backgroundColor = .systemMint
+                                           height: labelHeight)
+        //numberOfTracksLabel.backgroundColor = .systemMint
         
     }
     

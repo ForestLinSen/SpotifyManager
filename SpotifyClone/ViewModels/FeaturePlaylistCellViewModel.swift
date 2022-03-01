@@ -7,6 +7,9 @@
 
 import Foundation
 
-class FeaturePlaylistCellViewModel{
-    
+
+struct FeaturePlaylistCellViewModel{
+    let name: String
+    let imageURL: URL?
+    let creatorName: String
 }
