@@ -7,6 +7,8 @@
 
 import Foundation
 
-class RecommendationCellViewModel{
-    
+struct RecommendationCellViewModel{
+    let trackName: String
+    let artistName: String
+    let imageURL: URL?
 }

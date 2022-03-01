@@ -7,11 +7,6 @@
 
 import UIKit
 
-
-
-
-
-
 class FeaturePlaylistCollectionViewCell: UICollectionViewCell{
     static let identifier = "RecommendationTrackCollectionViewCell"
     
@@ -76,6 +71,7 @@ class FeaturePlaylistCollectionViewCell: UICollectionViewCell{
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
         imageView.image = nil
         ownerLabel.text = nil
         playlistNameLabel.text = nil

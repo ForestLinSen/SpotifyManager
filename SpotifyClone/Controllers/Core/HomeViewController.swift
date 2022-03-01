@@ -48,7 +48,7 @@ class HomeViewController: UIViewController{
         view.addSubview(collectionView)
         collectionView.register(NewReleaseCollectionViewCell.self, forCellWithReuseIdentifier: NewReleaseCollectionViewCell.identifier)
         collectionView.register(FeaturePlaylistCollectionViewCell.self, forCellWithReuseIdentifier: FeaturePlaylistCollectionViewCell.identifier)
-        collectionView.register(FeaturePlaylistCollectionViewCell.self, forCellWithReuseIdentifier: FeaturePlaylistCollectionViewCell.identifier)
+        collectionView.register(RecommendedTrackCollectionViewCell.self, forCellWithReuseIdentifier: RecommendedTrackCollectionViewCell.identifier)
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.backgroundColor = .systemBackground
@@ -128,7 +128,11 @@ class HomeViewController: UIViewController{
                                                 imageURL: URL(string: $0.images.first?.url ?? ""),
                                                 creatorName: $0.owner.display_name)
         })))
-        sections.append(.recommendedTracks(viewModels: []))
+        sections.append(.recommendedTracks(viewModels: tracks.compactMap({
+            return RecommendationCellViewModel(trackName: $0.name,
+                                               artistName: $0.artists.first?.name ?? "",
+                                               imageURL: URL(string: $0.album.images.first?.url ?? ""))
+        })))
         
         collectionView.reloadData()
         
@@ -311,9 +315,19 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             
             
         case .recommendedTracks(viewModels: let viewModels):
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendedTrackCollectionViewCell.identifier, for: indexPath)
-            cell.backgroundColor = .systemMint
+            
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendedTrackCollectionViewCell.identifier
+                                                                , for: indexPath) as? RecommendedTrackCollectionViewCell else {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendedTrackCollectionViewCell.identifier, for: indexPath)
+
+                return cell
+            }
+            
+            let viewModel = viewModels[indexPath.row]
+            cell.configure(with: viewModel)
+            
             return cell
+            
         }
         
     }
