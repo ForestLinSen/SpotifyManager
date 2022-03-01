@@ -128,7 +128,6 @@ class HomeViewController: UIViewController{
         
         collectionView.reloadData()
         
-        print("Debug: new releases \(sections)")
     }
     
     
@@ -281,9 +280,16 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         switch type{
             
         case .newReleases(viewModels: let viewModels):
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewReleaseCollectionViewCell.identifier, for: indexPath)
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewReleaseCollectionViewCell.identifier, for: indexPath) as? NewReleaseCollectionViewCell else {
+                
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+                return cell
+            }
             
-            cell.backgroundColor = .systemRed
+            let viewModel = viewModels[indexPath.row]
+            
+            cell.configure(with: viewModel)
+
             return cell
         case .featuredPlaylists(viewModels: let viewModels):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FeaturePlaylistCollectionViewCell.identifier, for: indexPath)
