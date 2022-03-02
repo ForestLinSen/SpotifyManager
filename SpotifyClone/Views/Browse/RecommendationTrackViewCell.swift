@@ -39,18 +39,19 @@ class RecommendedTrackCollectionViewCell: UICollectionViewCell{
         contentView.addSubview(trackNameLabel)
         contentView.addSubview(artistNameLabel)
         contentView.addSubview(imageView)
+        contentView.backgroundColor = .secondarySystemBackground
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let imageSize = contentView.frame.height - 10
+        let imageSize = contentView.frame.height - 20
         let labelHeight = contentView.frame.height / 5
         let labelWidth = contentView.frame.width / 3
         
-        imageView.frame = CGRect(x: 0, y: 0, width: imageSize, height: imageSize)
-        trackNameLabel.frame = CGRect(x: imageSize + 5, y: 10, width: labelWidth, height: labelHeight)
-        artistNameLabel.frame = CGRect(x: imageSize + 5, y: labelHeight+10, width: labelWidth, height: labelHeight)
+        imageView.frame = CGRect(x: 10, y: 10, width: imageSize, height: imageSize)
+        trackNameLabel.frame = CGRect(x: imageSize + 20, y: 10, width: labelWidth, height: labelHeight)
+        artistNameLabel.frame = CGRect(x: imageSize + 20, y: labelHeight+10, width: labelWidth, height: labelHeight)
         
     }
     

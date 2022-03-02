@@ -23,8 +23,12 @@ class HomeViewController: UIViewController{
             return HomeViewController.createCollectionLayout(section: sectionIndex)
         }))
     
-    
+     
     private var sections = [BrowseSectionType]()
+    
+    private var newAlbums: [Album]?
+    private var playlists: [Playlist]?
+    private var tracks: [AudioTrack]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,7 +69,8 @@ class HomeViewController: UIViewController{
         var recommendations: RecommendationResponse?
         
         // New Releases
-        APICaller.shared.getReleases { result in
+        APICaller.shared.getReleases {[weak self] result in
+            
             defer{
                 group.leave()
             }
@@ -104,13 +109,20 @@ class HomeViewController: UIViewController{
         }
         
         group.notify(queue: .main) { [weak self] in
+            
+            guard let self = self else { return }
+            
             guard let newAlbum = newReleases?.albums.items,
                   let playlists = featurePlaylists?.playlists.items,
                   let tracks = recommendations?.tracks else{
                       return
                   }
             
-            self?.configureModels(newAlbums: newAlbum, playlists: playlists, tracks: tracks)
+            self.newAlbums = newAlbum
+            self.playlists = playlists
+            self.tracks = tracks
+            
+            self.configureModels(newAlbums: self.newAlbums!, playlists: self.playlists!, tracks: self.tracks!)
         }
     }
     
@@ -286,7 +298,6 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         let type = sections[indexPath.section]
         
         switch type{
-            
         case .newReleases(viewModels: let viewModels):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewReleaseCollectionViewCell.identifier, for: indexPath) as? NewReleaseCollectionViewCell else {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
@@ -294,9 +305,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             }
             
             let viewModel = viewModels[indexPath.row]
-            
             cell.configure(with: viewModel)
-
             return cell
         case .featuredPlaylists(viewModels: let viewModels):
             
@@ -308,11 +317,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             
             let viewModel = viewModels[indexPath.row]
             cell.configure(with: viewModel)
-            
-            //cell.backgroundColor = .systemGray
-            
             return cell
-            
             
         case .recommendedTracks(viewModels: let viewModels):
             
@@ -328,6 +333,29 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             
             return cell
             
+        }
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        
+        let section = sections[indexPath.section]
+        
+        switch section{
+            
+        case .newReleases(viewModels: let viewModels):
+            if let album = self.newAlbums?[indexPath.row]{
+                let vc = AlbumViewController(album: album)
+                vc.title = album.name
+                vc.navigationItem.largeTitleDisplayMode = .never
+                navigationController?.pushViewController(vc, animated: true)
+                
+            }
+        case .featuredPlaylists(viewModels: let viewModels):
+            break
+        case .recommendedTracks(viewModels: let viewModels):
+            break
         }
         
     }
