@@ -182,7 +182,7 @@ final class APICaller{
                 }
 
                 do{
-                    let jsonData = try JSONSerialization.data(withJSONObject: data, options: .fragmentsAllowed)
+                    let jsonData = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
                     print("Debug: album detail \(jsonData)")
                 }catch{
                     print("Debug: error in fetching album: \(error)")
