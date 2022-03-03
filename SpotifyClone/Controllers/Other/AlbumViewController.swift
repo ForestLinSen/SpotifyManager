@@ -14,6 +14,10 @@ class AlbumViewController: UIViewController {
     init(album: Album){
         self.album = album
         super.init(nibName: nil, bundle: nil)
+        
+        APICaller.shared.getAlbumDetail(albumID: album.id) { _ in
+            
+        }
     }
     
     required init?(coder: NSCoder) {

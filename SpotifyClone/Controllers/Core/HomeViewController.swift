@@ -132,7 +132,8 @@ class HomeViewController: UIViewController{
             return NewReleasesCellViewModel(name: $0.name,
                                             artworkURL: URL(string: $0.images.first?.url ?? ""),
                                             numberOfTracks: $0.total_tracks,
-                                            artistName: $0.artists.first?.name ?? "Unknown")
+                                            artistName: $0.artists.first?.name ?? "Unknown",
+                                            albumID: $0.id)
         })))
         
         sections.append(.featuredPlaylists(viewModels: playlists.compactMap({

@@ -12,6 +12,8 @@ final class APICaller{
     
     private init(){}
     
+    // MARK: - User Profile
+    
     public func getCurrentUserProfile(completion: @escaping (Result<UserProfile, Error>) -> Void){
         
         createRequest(with: URL(string: K.baseAPIURL + "/me"), type: .GET) { request in
@@ -37,6 +39,9 @@ final class APICaller{
             task.resume()
         }
     }
+    
+    
+    // MARK: - New releases
     
     public func getReleases(completion: @escaping (Result<NewReleasesResponse, Error>) -> Void){
         
@@ -66,6 +71,8 @@ final class APICaller{
     }
     
     
+    // MARK: - Playlists
+    
     public func getFeaturedPlaylists(completion: @escaping (Result<FeaturedPlaylistsResponse, Error>) -> Void){
         let requestString = K.baseAPIURL + "/browse/featured-playlists?limit=10"
         createRequest(with: URL(string: requestString), type: .GET) { request in
@@ -76,9 +83,6 @@ final class APICaller{
                 }
                 
                 do{
-//                    let jsonData = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
-//                    print("Debug: featured playlists: \(jsonData)")
-                    
                     let featuredReleases = try JSONDecoder().decode(FeaturedPlaylistsResponse.self, from: data)
                     completion(.success(featuredReleases))
                     
@@ -92,6 +96,9 @@ final class APICaller{
             
         }
     }
+    
+    
+    // MARK: - Track
     
     public func getRecommendation(completion: @escaping (Result<RecommendationResponse, Error>) -> Void){
         getGenres {[weak self] result in
@@ -154,6 +161,33 @@ final class APICaller{
                     
                 }catch{}
 
+            }
+            
+            task.resume()
+        }
+    }
+    
+    
+    // MARK: - Album details
+    func getAlbumDetail(albumID: String, completion: @escaping (AlbumDetailResponse) -> Void){
+        let requestString = K.baseAPIURL + "/albums/\(albumID)"
+        
+        createRequest(with: URL(string: requestString), type: .GET) { request in
+            let task = URLSession.shared.dataTask(with: request) { data, _, error in
+                //print("Debug: request string \(requestString)")
+                
+                guard let data = data, error == nil else{
+                    print("Debug: error in fetching album: \(error)")
+                    return
+                }
+
+                do{
+                    let jsonData = try JSONSerialization.data(withJSONObject: data, options: .fragmentsAllowed)
+                    print("Debug: album detail \(jsonData)")
+                }catch{
+                    print("Debug: error in fetching album: \(error)")
+                }
+                
             }
             
             task.resume()
