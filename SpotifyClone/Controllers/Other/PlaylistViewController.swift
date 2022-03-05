@@ -22,6 +22,10 @@ class PlaylistViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        
+        APICaller.shared.getPlaylistDetail(playlistID: playlist.id) { result in
+            
+        }
     }
     
 }

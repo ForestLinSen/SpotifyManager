@@ -354,7 +354,13 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
                 
             }
         case .featuredPlaylists(viewModels: let viewModels):
-            break
+            if let playlist = self.playlists?[indexPath.row]{
+                let vc = PlaylistViewController(playlist: playlist)
+                vc.title = playlist.name
+                vc.navigationItem.largeTitleDisplayMode = .never
+                navigationController?.pushViewController(vc, animated: true)
+            }
+            
         case .recommendedTracks(viewModels: let viewModels):
             break
         }

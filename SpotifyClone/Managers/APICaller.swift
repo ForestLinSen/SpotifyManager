@@ -169,7 +169,7 @@ final class APICaller{
     
     
     // MARK: - Album details
-    func getAlbumDetail(albumID: String, completion: @escaping (AlbumDetailResponse) -> Void){
+    func getAlbumDetail(albumID: String, completion: @escaping (Result<AlbumDetailResponse, Error>) -> Void){
         let requestString = K.baseAPIURL + "/albums/\(albumID)"
         
         createRequest(with: URL(string: requestString), type: .GET) { request in
@@ -178,16 +178,54 @@ final class APICaller{
                 
                 guard let data = data, error == nil else{
                     print("Debug: error in fetching album: \(error)")
+                    completion(.failure(APIError.failedToGetData))
                     return
                 }
 
                 do{
-                    let jsonData = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
-                    print("Debug: album detail \(jsonData)")
+                    //let jsonData = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
+                    //print("Debug: album detail \(jsonData)")
+                    
+                    let albumDetail = try JSONDecoder().decode(AlbumDetailResponse.self, from: data)
+                    print("Debug: album detail: \(albumDetail)")
+                    completion(.success(albumDetail))
+                    
                 }catch{
+                    completion(.failure(APIError.failedToConvertData))
                     print("Debug: error in fetching album: \(error)")
                 }
                 
+            }
+            
+            task.resume()
+        }
+    }
+    
+    
+    // MARK: - Playlist details
+    func getPlaylistDetail(playlistID: String, completion: @escaping (Result<PlaylistDetailResponse, Error>) -> Void){
+        let requestString = K.baseAPIURL + "/playlists/\(playlistID)"
+        
+        createRequest(with: URL(string: requestString), type: .GET) { request in
+            let task = URLSession.shared.dataTask(with: request) { data, _, error in
+                guard let data = data, error == nil else {
+                    completion(.failure(APIError.failedToGetData))
+                    return
+                }
+                
+                do{
+//                    let jsonData = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
+//                    print("Debug: playlist data: \(jsonData)")
+                    
+                    let playlistDetail = try JSONDecoder().decode(PlaylistDetailResponse.self, from: data)
+                    
+                    print("Debug: playlist detail: \(playlistDetail)")
+                    completion(.success(playlistDetail))
+                    
+                }catch{
+                    print("Debug: Error in converting playlist detail into swift model: \(error)")
+                    completion(.failure(APIError.failedToConvertData))
+                }
             }
             
             task.resume()
@@ -203,6 +241,7 @@ final class APICaller{
     
     enum APIError: Error{
         case failedToGetData
+        case failedToConvertData
     }
     
     
