@@ -27,10 +27,10 @@ struct PlaylistTrack: Codable{
 }
 
 struct PlaylistTrackDetail: Codable{
+    let album: Album
     let artists: [Artist]
     let href: String
     let id: String
-    let images: [APIImage]?
     let name: String
     let uri: String
 }

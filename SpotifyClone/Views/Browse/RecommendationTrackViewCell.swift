@@ -30,6 +30,7 @@ class RecommendedTrackCollectionViewCell: UICollectionViewCell{
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
+        imageView.image = UIImage(systemName: "photo")
         return imageView
     }()
     
