@@ -114,7 +114,7 @@ final class APICaller{
                 
                 let genresString = genreSeed.joined(separator: ",")
                 
-                let recommendationString = K.baseAPIURL + "/recommendations?limit=10&seed_genres=\(genresString)"
+                let recommendationString = K.baseAPIURL + "/recommendations?limit=15&seed_genres=\(genresString)"
                 //print("Debug: recommendation url: \(recommendationString)")
                 self?.createRequest(with: URL(string: recommendationString), type: .GET) { request in
                     let task = URLSession.shared.dataTask(with: request) { data, _, error in
@@ -219,7 +219,7 @@ final class APICaller{
                     
                     let playlistDetail = try JSONDecoder().decode(PlaylistDetailResponse.self, from: data)
                     
-                    print("Debug: playlist detail: \(playlistDetail)")
+                    //print("Debug: playlist detail: \(playlistDetail)")
                     completion(.success(playlistDetail))
                     
                 }catch{

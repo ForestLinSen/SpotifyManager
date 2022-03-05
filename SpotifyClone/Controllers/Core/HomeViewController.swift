@@ -301,8 +301,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         switch type{
         case .newReleases(viewModels: let viewModels):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewReleaseCollectionViewCell.identifier, for: indexPath) as? NewReleaseCollectionViewCell else {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-                return cell
+                return UICollectionViewCell()
             }
             
             let viewModel = viewModels[indexPath.row]
@@ -311,9 +310,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         case .featuredPlaylists(viewModels: let viewModels):
             
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FeaturePlaylistCollectionViewCell.identifier, for: indexPath) as? FeaturePlaylistCollectionViewCell else {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FeaturePlaylistCollectionViewCell.identifier, for: indexPath)
-                cell.backgroundColor = .systemBlue
-                return cell
+                return UICollectionViewCell()
             }
             
             let viewModel = viewModels[indexPath.row]
@@ -324,9 +321,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendedTrackCollectionViewCell.identifier
                                                                 , for: indexPath) as? RecommendedTrackCollectionViewCell else {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendedTrackCollectionViewCell.identifier, for: indexPath)
-
-                return cell
+                return UICollectionViewCell()
             }
             
             let viewModel = viewModels[indexPath.row]

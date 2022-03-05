@@ -13,7 +13,7 @@ class PlaylistViewController: UIViewController {
         PlaylistViewController.createCollectionLayout()
     }))
     
-    private var viewModels: [RecommendationCellViewModel]?
+    private var viewModels = [RecommendationCellViewModel]()
     
     init(playlist: Playlist){
         self.playlist = playlist
@@ -38,25 +38,29 @@ class PlaylistViewController: UIViewController {
                                                     imageURL: URL(string: playlistTrack.track.album.images.first?.url ?? ""))
                     }
                     
-                    self?.collectionView.reloadData()
+                    
                 
                 case .failure(_):
                     break
                 }
+                
+                self?.collectionView.reloadData()
             }
+            
+            
         }
         
         collectionView.register(RecommendedTrackCollectionViewCell.self, forCellWithReuseIdentifier: RecommendedTrackCollectionViewCell.identifier)
         
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.backgroundColor = .systemBackground
         
         view.addSubview(collectionView)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
         collectionView.frame = view.bounds
     }
     
@@ -73,7 +77,7 @@ class PlaylistViewController: UIViewController {
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalHeight(0.1)),
+                heightDimension: .fractionalHeight(0.15)),
             subitem: item,
             count: 1)
         
@@ -87,15 +91,16 @@ class PlaylistViewController: UIViewController {
 
 extension PlaylistViewController: UICollectionViewDelegate, UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModels?.count ?? 0
+        print("Debug: playlist viewModels count: \(viewModels.count)")
+        return viewModels.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendedTrackCollectionViewCell.identifier, for: indexPath) as? RecommendedTrackCollectionViewCell, let viewModel = viewModels?[indexPath.row] else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendedTrackCollectionViewCell.identifier, for: indexPath) as? RecommendedTrackCollectionViewCell else {
             return UICollectionViewCell()
         }
         
-        
+        let viewModel = viewModels[indexPath.row]
         cell.configure(with: viewModel)
         
         return cell

@@ -87,6 +87,7 @@ class NewReleaseCollectionViewCell: UICollectionViewCell{
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
         albumNameLabel.text = nil
         artistNameLabel.text = nil
         numberOfTracksLabel.text = nil
