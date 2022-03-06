@@ -14,6 +14,7 @@ class PlaylistViewController: UIViewController {
     }))
     
     private var viewModels = [RecommendationCellViewModel]()
+    private var headerViewModel: PlaylistHeaderViewModel?
     
     init(playlist: Playlist){
         self.playlist = playlist
@@ -36,9 +37,14 @@ class PlaylistViewController: UIViewController {
                         RecommendationCellViewModel(trackName: playlistTrack.track.name,
                                                     artistName: playlistTrack.track.artists.first?.name ?? "-",
                                                     imageURL: URL(string: playlistTrack.track.album.images.first?.url ?? ""))
+                        
+                        
                     }
                     
-                    
+                    self?.headerViewModel = PlaylistHeaderViewModel(name: playlistResponse.name,
+                                                              owner: playlistResponse.owner.display_name,
+                                                              description: playlistResponse.description,
+                                                              imageURL: playlistResponse.images.first?.url ?? "")
                     
                 case .failure(_):
                     break
@@ -103,7 +109,6 @@ class PlaylistViewController: UIViewController {
 
 extension PlaylistViewController: UICollectionViewDelegate, UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print("Debug: playlist viewModels count: \(viewModels.count)")
         return viewModels.count
     }
     
@@ -120,13 +125,17 @@ extension PlaylistViewController: UICollectionViewDelegate, UICollectionViewData
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard kind == UICollectionView.elementKindSectionHeader,
+              
               let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: PlaylistHeaderCollectionReusableView.identifier, for: indexPath) as? PlaylistHeaderCollectionReusableView else {
                   return UICollectionReusableView()
               }
         
-        // header.configure
+        if let viewModel = headerViewModel{
+            header.configure(with: viewModel)
+        }
+   
         return header
-        
+ 
     }
     
     

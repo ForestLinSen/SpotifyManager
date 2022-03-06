@@ -17,15 +17,13 @@ enum BrowseSectionType{
 class HomeViewController: UIViewController{
     
     
-    let collectionView = UICollectionView(
+    private let collectionView = UICollectionView(
         frame: .zero,
         collectionViewLayout: UICollectionViewCompositionalLayout(sectionProvider: { sectionIndex, _ in
             return HomeViewController.createCollectionLayout(section: sectionIndex)
         }))
     
-     
     private var sections = [BrowseSectionType]()
-    
     private var newAlbums: [Album]?
     private var playlists: [Playlist]?
     private var tracks: [AudioTrack]?
@@ -33,7 +31,7 @@ class HomeViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Home"
-        view.backgroundColor = .systemBackground
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gear"),
                                                             style: .plain,
                                                             target: self,
@@ -41,6 +39,9 @@ class HomeViewController: UIViewController{
         
         layoutCollectionView()
         fetchData()
+        
+        
+        
     }
     
     override func viewDidLayoutSubviews() {
