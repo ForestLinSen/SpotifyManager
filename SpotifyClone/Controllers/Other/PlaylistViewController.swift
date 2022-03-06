@@ -30,7 +30,7 @@ class PlaylistViewController: UIViewController {
         
         APICaller.shared.getPlaylistDetail(playlistID: playlist.id) {[weak self] result in
             DispatchQueue.main.async {
-                switch result{       
+                switch result{
                 case .success(let playlistResponse):
                     self?.viewModels = playlistResponse.tracks.items.compactMap { playlistTrack in
                         RecommendationCellViewModel(trackName: playlistTrack.track.name,
@@ -39,7 +39,7 @@ class PlaylistViewController: UIViewController {
                     }
                     
                     
-                
+                    
                 case .failure(_):
                     break
                 }
@@ -51,6 +51,8 @@ class PlaylistViewController: UIViewController {
         }
         
         collectionView.register(RecommendedTrackCollectionViewCell.self, forCellWithReuseIdentifier: RecommendedTrackCollectionViewCell.identifier)
+        
+        collectionView.register(PlaylistHeaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: PlaylistHeaderCollectionReusableView.identifier)
         
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -84,6 +86,16 @@ class PlaylistViewController: UIViewController {
         // section
         let section = NSCollectionLayoutSection(group: group)
         
+        // boundary items such as footer and
+        section.boundarySupplementaryItems = [
+            NSCollectionLayoutBoundarySupplementaryItem(
+                layoutSize: NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .fractionalHeight(0.2)),
+                elementKind: UICollectionView.elementKindSectionHeader,
+                alignment: .top)
+        ]
+        
         return section
     }
     
@@ -104,6 +116,17 @@ extension PlaylistViewController: UICollectionViewDelegate, UICollectionViewData
         cell.configure(with: viewModel)
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard kind == UICollectionView.elementKindSectionHeader,
+              let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: PlaylistHeaderCollectionReusableView.identifier, for: indexPath) as? PlaylistHeaderCollectionReusableView else {
+                  return UICollectionReusableView()
+              }
+        
+        // header.configure
+        return header
+        
     }
     
     
