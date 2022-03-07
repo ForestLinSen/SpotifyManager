@@ -12,7 +12,7 @@ class RecommendedTrackCollectionViewCell: UICollectionViewCell{
     
     private let trackNameLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 18, weight: .semibold)
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
         label.textAlignment = .left
         //label.backgroundColor = .systemRed
         return label
@@ -20,7 +20,7 @@ class RecommendedTrackCollectionViewCell: UICollectionViewCell{
     
     private let artistNameLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 16, weight: .regular)
+        label.font = .systemFont(ofSize: 14, weight: .regular)
         label.textAlignment = .left
         //label.backgroundColor = .systemBlue
         return label
@@ -48,7 +48,7 @@ class RecommendedTrackCollectionViewCell: UICollectionViewCell{
         
         let imageSize = contentView.frame.height - 20
         let labelHeight = contentView.frame.height / 5
-        let labelWidth = contentView.frame.width / 3
+        let labelWidth = contentView.frame.width / 2
         
         imageView.frame = CGRect(x: 10, y: 10, width: imageSize, height: imageSize)
         trackNameLabel.frame = CGRect(x: imageSize + 20, y: 10, width: labelWidth, height: labelHeight)

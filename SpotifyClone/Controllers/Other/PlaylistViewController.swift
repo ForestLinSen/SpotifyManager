@@ -85,7 +85,7 @@ class PlaylistViewController: UIViewController {
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalHeight(0.15)),
+                heightDimension: .fractionalHeight(0.11)),
             subitem: item,
             count: 1)
         
@@ -132,11 +132,17 @@ extension PlaylistViewController: UICollectionViewDelegate, UICollectionViewData
         
         if let viewModel = headerViewModel{
             header.configure(with: viewModel)
+            header.delegate = self
         }
    
         return header
  
     }
     
-    
+}
+
+extension PlaylistViewController: PlaylistHeaderCollectionReusableViewDelegate{
+    func didTapPlayAll(_ header: PlaylistHeaderCollectionReusableView) {
+        print("Debug: playAll button tapped")
+    }
 }
