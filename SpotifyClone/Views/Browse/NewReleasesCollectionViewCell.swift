@@ -95,7 +95,7 @@ class NewReleaseCollectionViewCell: UICollectionViewCell{
     }
     
     func configure(with viewModel: NewReleasesCellViewModel){
-        albumNameLabel.text = viewModel.artistName
+        albumNameLabel.text = viewModel.name
         numberOfTracksLabel.text = "Tracks: \(String(viewModel.numberOfTracks))"
         artistNameLabel.text = viewModel.artistName
         
