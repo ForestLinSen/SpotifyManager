@@ -49,13 +49,10 @@ class PlaylistViewController: UIViewController {
                 case .failure(_):
                     break
                 }
-                
                 self?.collectionView.reloadData()
             }
-            
-            
         }
-        
+         
         collectionView.register(RecommendedTrackCollectionViewCell.self, forCellWithReuseIdentifier: RecommendedTrackCollectionViewCell.identifier)
         
         collectionView.register(PlaylistHeaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: PlaylistHeaderCollectionReusableView.identifier)
@@ -65,6 +62,18 @@ class PlaylistViewController: UIViewController {
         collectionView.backgroundColor = .systemBackground
         
         view.addSubview(collectionView)
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action,
+                                                            target: self,
+                                                            action: #selector(didTapShareButton))
+    }
+    
+    @objc func didTapShareButton(){
+        guard let url = URL(string: playlist.external_urls["spotify"] ?? "") else { return }
+        
+        let vc = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem // for iPad
+        present(vc, animated: true)
     }
     
     override func viewDidLayoutSubviews() {
