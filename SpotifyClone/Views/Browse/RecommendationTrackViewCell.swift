@@ -52,7 +52,7 @@ class RecommendedTrackCollectionViewCell: UICollectionViewCell{
         
         imageView.frame = CGRect(x: 10, y: 10, width: imageSize, height: imageSize)
         trackNameLabel.frame = CGRect(x: imageSize + 20, y: 10, width: labelWidth, height: labelHeight)
-        artistNameLabel.frame = CGRect(x: imageSize + 20, y: labelHeight+10, width: labelWidth, height: labelHeight)
+        artistNameLabel.frame = CGRect(x: imageSize + 20, y: labelHeight+15, width: labelWidth, height: labelHeight)
         
     }
     
@@ -69,5 +69,12 @@ class RecommendedTrackCollectionViewCell: UICollectionViewCell{
         trackNameLabel.text = viewModel.trackName
         artistNameLabel.text = viewModel.artistName
         imageView.sd_setImage(with: viewModel.imageURL)
+    }
+    
+    func configure(with viewModel: AlbumCellViewModel){
+        trackNameLabel.text = viewModel.name
+        artistNameLabel.text = viewModel.artist
+        imageView.image = UIImage(systemName: "music.note")
+        
     }
 }

@@ -18,7 +18,7 @@ class AlbumViewController: UIViewController {
         return collectionView
     }()
     
-    private var viewModels = [RecommendationCellViewModel]()
+    private var viewModels = [AlbumCellViewModel]()
     
     static func createLayoutSection() -> NSCollectionLayoutSection{
         // item
@@ -33,7 +33,7 @@ class AlbumViewController: UIViewController {
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalHeight(0.1)),
+                heightDimension: .fractionalHeight(0.07)),
             subitem: item,
             count: 1)
         
@@ -53,7 +53,7 @@ class AlbumViewController: UIViewController {
                 
                 DispatchQueue.main.async {
                     self?.viewModels = albumResponse.tracks.items.compactMap({
-                        return RecommendationCellViewModel(trackName: $0.name, artistName: $0.artists.first?.name ?? "Unknown", imageURL: nil)
+                        return AlbumCellViewModel(name: $0.name, artist: $0.artists.first?.name ?? "Unknown")
                     })
                     
                     self?.collectionView.reloadData()
