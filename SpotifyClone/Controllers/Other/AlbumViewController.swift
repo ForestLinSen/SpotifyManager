@@ -19,6 +19,7 @@ class AlbumViewController: UIViewController {
     }()
     
     private var viewModels = [AlbumCellViewModel]()
+    private var headerViewModel: PlaylistHeaderViewModel?
     
     static func createLayoutSection() -> NSCollectionLayoutSection{
         // item
@@ -40,6 +41,14 @@ class AlbumViewController: UIViewController {
         // section
         let section = NSCollectionLayoutSection(group: group)
         
+        section.boundarySupplementaryItems = [
+            NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalHeight(0.2)),
+                                                        elementKind: UICollectionView.elementKindSectionHeader,
+                                                        alignment: .top)
+        ]
+
         return section
     }
     
@@ -52,6 +61,7 @@ class AlbumViewController: UIViewController {
             case .success(let albumResponse):
                 
                 DispatchQueue.main.async {
+                    self?.headerViewModel = PlaylistHeaderViewModel(name: albumResponse.name, owner: albumResponse.artists.first?.name ?? "", description: "", imageURL: albumResponse.images.first?.url ?? "")
                     self?.viewModels = albumResponse.tracks.items.compactMap({
                         return AlbumCellViewModel(name: $0.name, artist: $0.artists.first?.name ?? "Unknown")
                     })
@@ -77,9 +87,14 @@ class AlbumViewController: UIViewController {
         
         collectionView.register(RecommendedTrackCollectionViewCell.self, forCellWithReuseIdentifier: RecommendedTrackCollectionViewCell.identifier)
         
+        collectionView.register(PlaylistHeaderCollectionReusableView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: PlaylistHeaderCollectionReusableView.identifier)
+        
         view.addSubview(collectionView)
         collectionView.dataSource = self
         collectionView.delegate = self
+
     }
     
     override func viewDidLayoutSubviews() {
@@ -91,6 +106,18 @@ class AlbumViewController: UIViewController {
 extension AlbumViewController: UICollectionViewDataSource, UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModels.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard kind == UICollectionView.elementKindSectionHeader, let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: PlaylistHeaderCollectionReusableView.identifier, for: indexPath) as? PlaylistHeaderCollectionReusableView else {
+            return UICollectionReusableView()
+        }
+        
+        if let viewModel = headerViewModel{
+            header.configure(with: viewModel)
+        }
+
+        return header
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
