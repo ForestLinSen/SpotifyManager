@@ -38,7 +38,7 @@ class PlaylistHeaderCollectionReusableView: UICollectionReusableView{
     
     private let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 12, weight: .regular)
+        label.font = .systemFont(ofSize: 14, weight: .regular)
         label.numberOfLines = 0
         label.textColor = .systemGray
         return label

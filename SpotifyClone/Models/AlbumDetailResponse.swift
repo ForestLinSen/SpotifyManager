@@ -15,6 +15,7 @@ struct AlbumDetailResponse: Codable{
     let name: String
     let total_tracks: Int
     let tracks: AlbumTrackResponse
+    let release_date: String
 }
 
 struct AlbumTrackResponse: Codable{

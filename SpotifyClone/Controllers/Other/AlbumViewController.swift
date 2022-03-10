@@ -61,7 +61,13 @@ class AlbumViewController: UIViewController {
             case .success(let albumResponse):
                 
                 DispatchQueue.main.async {
-                    self?.headerViewModel = PlaylistHeaderViewModel(name: albumResponse.name, owner: albumResponse.artists.first?.name ?? "", description: "", imageURL: albumResponse.images.first?.url ?? "")
+                    
+                    self?.headerViewModel = PlaylistHeaderViewModel(
+                        name: albumResponse.name,
+                        owner: albumResponse.artists.first?.name ?? "",
+                        description: "Release date: \(String.formatteDate(string: albumResponse.release_date))",
+                        imageURL: albumResponse.images.first?.url ?? "")
+                    
                     self?.viewModels = albumResponse.tracks.items.compactMap({
                         return AlbumCellViewModel(name: $0.name, artist: $0.artists.first?.name ?? "Unknown")
                     })

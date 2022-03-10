@@ -14,6 +14,7 @@
 		B92591D527B54E960019031E /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92591D427B54E960019031E /* HomeViewController.swift */; };
 		B92591DD27B54E970019031E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B92591DB27B54E970019031E /* LaunchScreen.storyboard */; };
 		B92DD43C27C6361600FFEC10 /* RecommendationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92DD43B27C6361600FFEC10 /* RecommendationResponse.swift */; };
+		B9345DB927DA40B40057290E /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9345DB827DA40B40057290E /* Extension.swift */; };
 		B936EDD227C1586100E1FA27 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = B936EDD127C1586100E1FA27 /* SDWebImage */; };
 		B940ECFB27B7694B006B3332 /* K.swift in Sources */ = {isa = PBXBuildFile; fileRef = B940ECFA27B7694B006B3332 /* K.swift */; };
 		B940ECFE27B96AC0006B3332 /* AuthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B940ECFD27B96AC0006B3332 /* AuthResponse.swift */; };
@@ -57,6 +58,7 @@
 		B92591DC27B54E970019031E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B92591DE27B54E970019031E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B92DD43B27C6361600FFEC10 /* RecommendationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationResponse.swift; sourceTree = "<group>"; };
+		B9345DB827DA40B40057290E /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		B940ECFA27B7694B006B3332 /* K.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = K.swift; sourceTree = "<group>"; };
 		B940ECFD27B96AC0006B3332 /* AuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResponse.swift; sourceTree = "<group>"; };
 		B9445C4327D1F88200BE453A /* PlaylistDetailResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistDetailResponse.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 				B9FBDEF727C1FD6F003B0244 /* Assets.xcassets */,
 				B9576A1427B63223006E49DB /* Config.xcconfig */,
 				B940ECFA27B7694B006B3332 /* K.swift */,
+				B9345DB827DA40B40057290E /* Extension.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -355,6 +358,7 @@
 				B9C53F9B27BE06C400E4644A /* APICaller.swift in Sources */,
 				B9BA344D27B566B90001C99E /* LibraryViewController.swift in Sources */,
 				B940ECFE27B96AC0006B3332 /* AuthResponse.swift in Sources */,
+				B9345DB927DA40B40057290E /* Extension.swift in Sources */,
 				B9576A1627B63D6E006E49DB /* AuthViewController.swift in Sources */,
 				B9F5B16327D8EFCA0098E717 /* AlbumCellViewModel.swift in Sources */,
 				B968A01127D4793800DB34F0 /* PlaylistHeaderCollectionReusableView.swift in Sources */,
