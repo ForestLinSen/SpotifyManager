@@ -123,6 +123,7 @@
 		B92591CF27B54E960019031E /* SpotifyClone */ = {
 			isa = PBXGroup;
 			children = (
+				B92591DE27B54E970019031E /* Info.plist */,
 				B940ECFC27B96AA8006B3332 /* Models */,
 				B92591E927B54F1A0019031E /* Products */,
 				B92591E827B54F130019031E /* Controllers */,
@@ -130,8 +131,6 @@
 				B92591E627B54F010019031E /* ViewModels */,
 				B92591E527B54EF30019031E /* Managers */,
 				B92591E427B54EE30019031E /* Resources */,
-				B92591DB27B54E970019031E /* LaunchScreen.storyboard */,
-				B92591DE27B54E970019031E /* Info.plist */,
 			);
 			path = SpotifyClone;
 			sourceTree = "<group>";
@@ -139,6 +138,7 @@
 		B92591E427B54EE30019031E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B92591DB27B54E970019031E /* LaunchScreen.storyboard */,
 				B92591D027B54E960019031E /* AppDelegate.swift */,
 				B92591D227B54E960019031E /* SceneDelegate.swift */,
 				B9FBDEF727C1FD6F003B0244 /* Assets.xcassets */,
@@ -234,8 +234,8 @@
 		B9BA344827B565090001C99E /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				B92591D427B54E960019031E /* HomeViewController.swift */,
 				B9BA344627B557620001C99E /* TabBarViewController.swift */,
+				B92591D427B54E960019031E /* HomeViewController.swift */,
 				B9BA344A27B566430001C99E /* SearchViewController.swift */,
 				B9BA344C27B566B90001C99E /* LibraryViewController.swift */,
 			);
