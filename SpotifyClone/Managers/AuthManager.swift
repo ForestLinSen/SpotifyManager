@@ -50,9 +50,7 @@ final class AuthManager{
         return currentData.addingTimeInterval(fiveMinutes) >= expirationDate
 
     }
-    
 
-    
     /// Get token
     public func exchangeCodeForToken(code: String, completion: @escaping ((Bool) -> Void)){
         
@@ -202,5 +200,7 @@ final class AuthManager{
 
         UserDefaults.standard.set(Date().addingTimeInterval(TimeInterval(result.expires_in)), forKey: "expirationDate")
     }
+    
+    
 
 }

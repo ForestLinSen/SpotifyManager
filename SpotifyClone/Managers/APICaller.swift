@@ -214,8 +214,6 @@ final class APICaller{
                 }
                 
                 do{
-//                    let jsonData = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
-//                    print("Debug: playlist data: \(jsonData)")
                     
                     let playlistDetail = try JSONDecoder().decode(PlaylistDetailResponse.self, from: data)
                     
@@ -226,6 +224,33 @@ final class APICaller{
                     print("Debug: Error in converting playlist detail into swift model: \(error)")
                     completion(.failure(APIError.failedToConvertData))
                 }
+            }
+            
+            task.resume()
+        }
+    }
+    
+    
+    // MARK: - caregories
+    func getCategories(completion: @escaping (Result<CategoriesResponse, Error>) -> Void){
+        let requestString = K.baseAPIURL + "/browse/categories"
+        createRequest(with: URL(string: requestString), type: .GET) { request in
+            let task = URLSession.shared.dataTask(with: request){data, _, error in
+                
+                guard let data = data else {
+                    print("Debug: cannot get genre data: \(error)")
+                    return
+                }
+                
+                do{
+                    //let json = try JSONSerialization.jsonObject(with: data)
+                    
+                    let categoryResponse = try JSONDecoder().decode(CategoriesResponse.self, from: data)
+                    completion(.success(categoryResponse))
+                    //print("Debug: getCategories: \(categoryResponse)")
+                    
+                    
+                }catch{}
             }
             
             task.resume()

@@ -23,6 +23,20 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
         SearchViewController.createCollectionViewSection()
     }))
     
+    private let genreColors: [UIColor] = [
+        .systemPink,
+        .systemGreen,
+        .systemBrown,
+        .systemRed,
+        .orange,
+        .systemPurple,
+        .systemGray,
+        .systemBlue
+        
+    ]
+    
+    private var viewModels = [CategoryViewModel]()
+    
     static func createCollectionViewSection() -> NSCollectionLayoutSection{
         // item
         let item = NSCollectionLayoutBoundarySupplementaryItem(
@@ -36,7 +50,7 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalHeight(0.13)),
+                heightDimension: .fractionalHeight(0.15)),
             subitem: item,
             count: 2)
         
@@ -55,11 +69,28 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
         
         navigationItem.searchController = searchController
         
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(GenreCollectionViewCell.self, forCellWithReuseIdentifier: GenreCollectionViewCell.identifier)
         
         collectionView.delegate = self
         collectionView.dataSource = self
         view.addSubview(collectionView)
+        
+        APICaller.shared.getCategories {[weak self] result in
+            switch result{
+                
+            case .success(let categoryResponse):
+
+                DispatchQueue.main.async {
+                    self?.viewModels = categoryResponse.categories.items.compactMap({
+                        return CategoryViewModel(name: $0.name, image: $0.icons.first?.url ?? "" , href: $0.href, id: $0.id)
+                    })
+                    self?.collectionView.reloadData()
+                }
+
+            case .failure(_):
+                break
+            }
+        }
     }
     
     func updateSearchResults(for searchController: UISearchController) {
@@ -80,12 +111,18 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
 
 extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        20
+        viewModels.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        cell.backgroundColor = .systemGreen
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GenreCollectionViewCell.identifier, for: indexPath) as? GenreCollectionViewCell else{
+            return UICollectionViewCell()
+        }
+        
+        let viewModel = viewModels[indexPath.row]
+        
+        cell.configure(title: viewModel.name, imageURL: viewModel.image, color: genreColors.randomElement()!)
+        cell.layer.cornerRadius = 15
         
         return cell
     }
