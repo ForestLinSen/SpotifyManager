@@ -231,7 +231,7 @@ final class APICaller{
     }
     
     
-    // MARK: - caregories
+    // MARK: - Caregories & Category Playlists
     func getCategories(completion: @escaping (Result<CategoriesResponse, Error>) -> Void){
         let requestString = K.baseAPIURL + "/browse/categories"
         createRequest(with: URL(string: requestString), type: .GET) { request in
@@ -251,6 +251,33 @@ final class APICaller{
                     
                     
                 }catch{}
+            }
+            
+            task.resume()
+        }
+    }
+    
+    func getCategoryPlaylists(id: String, completion: @escaping (Result<CategoryPlaylistsResponse, Error>) -> Void){
+        let requestString = K.baseAPIURL + "/browse/categories/\(id)/playlists"
+        
+        createRequest(with: URL(string: requestString), type: .GET) { request in
+            let task = URLSession.shared.dataTask(with: request) { data, _, error in
+                guard let data = data else {
+                    print("Debug: cannot get category playlist data: \(error)")
+                    return
+                }
+                
+                do{
+                    let playlists = try JSONDecoder().decode(CategoryPlaylistsResponse.self, from: data)
+                    //let jsonData = try JSONSerialization.jsonObject(with: data)
+                    
+                    print("Debug: category playlists: \(playlists)")
+                    completion(.success(playlists))
+                    
+                }catch{
+                    print("Debug: cannot convert playlist data model: \(error)")
+                }
+                
             }
             
             task.resume()

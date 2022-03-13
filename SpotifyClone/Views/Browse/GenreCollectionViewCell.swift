@@ -22,7 +22,7 @@ class GenreCollectionViewCell: UICollectionViewCell {
     
     private let genreLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .semibold)
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
         label.textColor = .white
         return label
     }()
@@ -37,6 +37,8 @@ class GenreCollectionViewCell: UICollectionViewCell {
         
         addSubview(genreImageView)
         addSubview(genreLabel)
+        
+        
     }
     
     required init?(coder: NSCoder) {
@@ -48,8 +50,9 @@ class GenreCollectionViewCell: UICollectionViewCell {
         
         let imageSize = frame.width / 2.5
         let labelWidth = frame.width / 1.8
-        genreImageView.frame = CGRect(x: frame.width - imageSize - 5, y: 5, width: imageSize, height: imageSize)
+        genreImageView.frame = CGRect(x: frame.width - imageSize - 10, y: 10, width: imageSize, height: imageSize)
         genreLabel.frame = CGRect(x: 15, y: frame.height - 30, width: labelWidth, height: 20)
+        genreImageView.layer.cornerRadius = 15
     }
     
     

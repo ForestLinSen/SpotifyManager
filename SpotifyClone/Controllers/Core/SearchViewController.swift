@@ -73,6 +73,7 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
         
         collectionView.delegate = self
         collectionView.dataSource = self
+        
         view.addSubview(collectionView)
         
         APICaller.shared.getCategories {[weak self] result in
@@ -127,5 +128,15 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         return cell
     }
     
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        
+        let viewModel = viewModels[indexPath.row]
+        print("Debug: did select item id: \(viewModel.id)")
+        
+        let vc = CategoryPlaylistViewController(categoryID: viewModel.id)
+        vc.title = viewModel.name
+        navigationController?.pushViewController(vc, animated: true)
+
+    }
 }
