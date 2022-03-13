@@ -14,6 +14,7 @@ class CategoryPlaylistViewController: UIViewController {
     }))
     
     private var viewModels = [FeaturePlaylistCellViewModel]()
+    private var playlists = [Playlist]()
     private var categoryID: String
 
     override func viewDidLoad() {
@@ -34,6 +35,9 @@ class CategoryPlaylistViewController: UIViewController {
                     self?.viewModels = categoryPlaylistResponse.playlists.items.compactMap({
                         return FeaturePlaylistCellViewModel(name: $0.name, imageURL: URL(string: $0.images.first?.url ?? ""), creatorName: $0.owner.display_name)
                     })
+                    
+                    self?.playlists = categoryPlaylistResponse.playlists.items
+                    
                     print("Debug: viewModel counts: \(self?.viewModels.count)")
                     
                     self?.collectionView.reloadData()
@@ -90,6 +94,13 @@ extension CategoryPlaylistViewController: UICollectionViewDelegate, UICollection
 
         return cell
 
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let playlist = playlists[indexPath.row]
+        let vc = PlaylistViewController(playlist: playlist)
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     
