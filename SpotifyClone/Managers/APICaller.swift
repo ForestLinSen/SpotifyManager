@@ -285,6 +285,35 @@ final class APICaller{
     }
     
     
+    // MARK: - Search
+    func searchQuery(query: String, completion: @escaping (Result<SearchQueryResponse, Error>) -> Void){
+        let requestString = K.baseAPIURL + "/search?q=\(query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")&type=album,playlist,track,artist&limit=2"
+        
+        
+        print("Debug: request string: \(requestString)")
+        
+        createRequest(with: URL(string: requestString), type: .GET) { request in
+            let task = URLSession.shared.dataTask(with: request) { data, _, error in
+                guard let data = data else {
+                    completion(.failure(APIError.failedToGetData))
+                    return
+                }
+                
+                do{
+                    let searchResult = try JSONDecoder().decode(SearchQueryResponse.self, from: data)
+                    print("Debug: search result: \(searchResult)")
+                    completion(.success(searchResult))
+                }catch{
+                    print("Debug: cannot conver search model: \(error)")
+                }
+
+            }
+            
+            task.resume()
+        }
+    }
+    
+    
     // MARK: - Private
     enum HTTPMethod: String{
         case GET

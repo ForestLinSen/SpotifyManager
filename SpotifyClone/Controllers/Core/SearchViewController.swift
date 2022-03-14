@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SearchViewController: UIViewController, UISearchResultsUpdating {
+class SearchViewController: UIViewController, UISearchResultsUpdating, UISearchBarDelegate {
 
     private let searchController: UISearchController = {
         let results = UIViewController()
@@ -66,6 +66,7 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
         
         navigationItem.searchController = searchController
         
@@ -94,13 +95,22 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
         }
     }
     
-    func updateSearchResults(for searchController: UISearchController) {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let text = searchController.searchBar.text else {
             return
         }
         
         print("Debug: search controller text: \(text)")
+        
+        APICaller.shared.searchQuery(query: text) { result in
+            
+        }
     }
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        
+    }
+    
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
