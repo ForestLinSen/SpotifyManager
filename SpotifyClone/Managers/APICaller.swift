@@ -286,7 +286,7 @@ final class APICaller{
     
     
     // MARK: - Search
-    func searchQuery(query: String, completion: @escaping (Result<SearchQueryResponse, Error>) -> Void){
+    func searchQuery(query: String, completion: @escaping (Result<[SearchResult], Error>) -> Void){
         let requestString = K.baseAPIURL + "/search?q=\(query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")&type=album,playlist,track,artist&limit=2"
         
         
@@ -300,9 +300,15 @@ final class APICaller{
                 }
                 
                 do{
-                    let searchResult = try JSONDecoder().decode(SearchQueryResponse.self, from: data)
-                    print("Debug: search result: \(searchResult)")
-                    completion(.success(searchResult))
+                    let result = try JSONDecoder().decode(SearchQueryResponse.self, from: data)
+                    var searchResults: [SearchResult] = []
+                    
+                    searchResults.append(contentsOf: result.tracks.items.compactMap{SearchResult.track(model: $0)})
+                    searchResults.append(contentsOf: result.playlists.items.compactMap{SearchResult.playlist(model: $0)})
+                    searchResults.append(contentsOf: result.albums.items.compactMap{SearchResult.album(model: $0)})
+                    searchResults.append(contentsOf: result.artists.items.compactMap{SearchResult.artist(model: $0)})
+                    
+                    completion(.success(searchResults))
                 }catch{
                     print("Debug: cannot conver search model: \(error)")
                 }

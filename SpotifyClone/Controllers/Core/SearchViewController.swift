@@ -10,8 +10,7 @@ import UIKit
 class SearchViewController: UIViewController, UISearchResultsUpdating, UISearchBarDelegate {
 
     private let searchController: UISearchController = {
-        let results = UIViewController()
-        results.view.backgroundColor = .systemBrown
+        let results = SearchresultViewController()
         let vc = UISearchController(searchResultsController: results)
         vc.searchBar.placeholder = "Songs, Artists, Albums..."
         vc.searchBar.searchBarStyle = .minimal
@@ -96,14 +95,20 @@ class SearchViewController: UIViewController, UISearchResultsUpdating, UISearchB
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let text = searchController.searchBar.text else {
+        guard let text = searchController.searchBar.text, let resultController = searchController.searchResultsController as? SearchresultViewController else {
             return
         }
         
         print("Debug: search controller text: \(text)")
         
         APICaller.shared.searchQuery(query: text) { result in
-            
+            switch result{
+            case .success(let searchResult):
+                resultController.update(with: searchResult)
+                print("Debug: search result: \(searchResult.count)")
+            case .failure(_):
+                break
+            }
         }
     }
     
