@@ -7,6 +7,7 @@
 
 import UIKit
 
+
 class SearchViewController: UIViewController, UISearchResultsUpdating, UISearchBarDelegate {
 
     private let searchController: UISearchController = {
@@ -105,7 +106,7 @@ class SearchViewController: UIViewController, UISearchResultsUpdating, UISearchB
             switch result{
             case .success(let searchResult):
                 resultController.update(with: searchResult)
-                print("Debug: search result: \(searchResult.count)")
+                
             case .failure(_):
                 break
             }
