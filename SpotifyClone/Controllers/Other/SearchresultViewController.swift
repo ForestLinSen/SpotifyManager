@@ -38,11 +38,13 @@ class SearchresultViewController: UIViewController{
     }
     
     func update(with results: [SearchResult]){
+        
+        sections.removeAll()
+        
         var artists = [SearchResult]()
         var album = [SearchResult]()
         var track = [SearchResult]()
         var playlist = [SearchResult]()
-        
         
         results.forEach { result in
             switch result{
