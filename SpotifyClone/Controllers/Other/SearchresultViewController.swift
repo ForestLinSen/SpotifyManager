@@ -12,8 +12,13 @@ struct SearchSection{
     let results: [SearchResult]
 }
 
+protocol SearchResultViewControllerDelegate: UIViewController{
+    func showSearchResult(_ controller: UIViewController)
+}
+
 class SearchresultViewController: UIViewController{
 
+    weak var delegate: SearchResultViewControllerDelegate?
     private var sections = [SearchSection]()
     
     private let tableView: UITableView = {
@@ -112,5 +117,18 @@ extension SearchresultViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        switch sections[indexPath.section].results[indexPath.row]{
+            
+        case .artist(model: let model):
+            break
+        case .album(model: let model):
+            break
+        case .track(model: let model):
+            break
+        case .playlist(model: let model):
+            let vc = PlaylistViewController(playlist: model)
+            delegate?.showSearchResult(vc)
+        }
     }
 }

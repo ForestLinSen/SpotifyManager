@@ -75,8 +75,9 @@ class SearchViewController: UIViewController, UISearchResultsUpdating, UISearchB
         collectionView.delegate = self
         collectionView.dataSource = self
         
-        view.addSubview(collectionView)
         
+        view.addSubview(collectionView)
+
         APICaller.shared.getCategories {[weak self] result in
             switch result{
                 
@@ -101,6 +102,8 @@ class SearchViewController: UIViewController, UISearchResultsUpdating, UISearchB
         }
         
         print("Debug: search controller text: \(text)")
+        
+        resultController.delegate = self
         
         APICaller.shared.searchQuery(query: text) { result in
             switch result{
@@ -155,4 +158,11 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         navigationController?.pushViewController(vc, animated: true)
 
     }
+}
+
+extension SearchViewController: SearchResultViewControllerDelegate{
+    func showSearchResult(_ controller: UIViewController) {
+        navigationController?.pushViewController(controller, animated: true)
+    }
+
 }
