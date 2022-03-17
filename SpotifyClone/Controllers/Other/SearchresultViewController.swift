@@ -20,10 +20,11 @@ class SearchresultViewController: UIViewController{
 
     weak var delegate: SearchResultViewControllerDelegate?
     private var sections = [SearchSection]()
+    private var viewModels = [SearchResultTableViewCellViewModel]()
     
     private let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(SearchResultTableViewCell.self, forCellReuseIdentifier: SearchResultTableViewCell.identifier)
         tableView.isHidden = true
         return tableView
     }()
@@ -35,6 +36,7 @@ class SearchresultViewController: UIViewController{
         tableView.delegate = self
         tableView.dataSource = self
         view.addSubview(tableView)
+
     }
     
     override func viewDidLayoutSubviews() {
@@ -79,31 +81,33 @@ class SearchresultViewController: UIViewController{
 
 extension SearchresultViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        
-        var config = cell.defaultContentConfiguration()
-        var name: String = ""
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultTableViewCell.identifier, for: indexPath) as? SearchResultTableViewCell else {
+            return UITableViewCell()
+        }
 
         switch sections[indexPath.section].results[indexPath.row]{
 
         case .artist(model: let model):
-            name = model.name
+            break
         case .album(model: let model):
-            name = model.name
+            break
         case .track(model: let model):
-            name = model.name
+           break
         case .playlist(model: let model):
-            name = model.name
+            cell.configure(with: SearchResultTableViewCellViewModel(imageURL: model.images.first?.url ?? "", mainLabel: model.name))
+            break
         }
-        
-        config.text = name
-        cell.contentConfiguration = config
+
         
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sections[section].results.count
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return view.frame.height / 15
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -123,7 +127,8 @@ extension SearchresultViewController: UITableViewDelegate, UITableViewDataSource
         case .artist(model: let model):
             break
         case .album(model: let model):
-            break
+            let vc = AlbumViewController(album: model)
+            delegate?.showSearchResult(vc)
         case .track(model: let model):
             break
         case .playlist(model: let model):
