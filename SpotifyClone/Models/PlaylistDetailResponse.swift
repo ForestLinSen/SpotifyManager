@@ -23,17 +23,17 @@ struct PlaylistTrackResponse: Codable{
 }
 
 struct PlaylistTrack: Codable{
-    let track: PlaylistTrackDetail
+    let track: AudioTrack
 }
 
-struct PlaylistTrackDetail: Codable{
-    let album: Album
-    let artists: [Artist]
-    let href: String
-    let id: String
-    let name: String
-    let uri: String
-}
+//struct PlaylistTrackDetail: Codable{
+//    let album: Album
+//    let artists: [Artist]
+//    let href: String
+//    let id: String
+//    let name: String
+//    let uri: String
+//}
 
 
 //{

@@ -15,6 +15,7 @@ class PlaylistViewController: UIViewController {
     
     private var viewModels = [RecommendationCellViewModel]()
     private var headerViewModel: PlaylistHeaderViewModel?
+    private var tracks = [AudioTrack]()
     
     init(playlist: Playlist){
         self.playlist = playlist
@@ -33,18 +34,17 @@ class PlaylistViewController: UIViewController {
             DispatchQueue.main.async {
                 switch result{
                 case .success(let playlistResponse):
-                    self?.viewModels = playlistResponse.tracks.items.compactMap { playlistTrack in
-                        RecommendationCellViewModel(trackName: playlistTrack.track.name,
-                                                    artistName: playlistTrack.track.artists.first?.name ?? "-",
-                                                    imageURL: URL(string: playlistTrack.track.album.images.first?.url ?? ""))
-                        
-                        
+                    playlistResponse.tracks.items.compactMap { playlistTrack in
+                        self?.tracks.append(playlistTrack.track)
+                        self?.viewModels.append(RecommendationCellViewModel(trackName: playlistTrack.track.name,
+                                                                            artistName: playlistTrack.track.artists.first?.name ?? "-",
+                                                                            imageURL: URL(string: playlistTrack.track.album.images.first?.url ?? "")))
                     }
                     
                     self?.headerViewModel = PlaylistHeaderViewModel(name: playlistResponse.name,
-                                                              owner: playlistResponse.owner.display_name,
-                                                              description: playlistResponse.description,
-                                                              imageURL: playlistResponse.images.first?.url ?? "")
+                                                                    owner: playlistResponse.owner.display_name,
+                                                                    description: playlistResponse.description,
+                                                                    imageURL: playlistResponse.images.first?.url ?? "")
                     
                 case .failure(_):
                     break
@@ -52,7 +52,7 @@ class PlaylistViewController: UIViewController {
                 self?.collectionView.reloadData()
             }
         }
-         
+        
         collectionView.register(RecommendedTrackCollectionViewCell.self, forCellWithReuseIdentifier: RecommendedTrackCollectionViewCell.identifier)
         
         collectionView.register(PlaylistHeaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: PlaylistHeaderCollectionReusableView.identifier)
@@ -135,18 +135,25 @@ extension PlaylistViewController: UICollectionViewDelegate, UICollectionViewData
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard kind == UICollectionView.elementKindSectionHeader,
               
-              let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: PlaylistHeaderCollectionReusableView.identifier, for: indexPath) as? PlaylistHeaderCollectionReusableView else {
-                  return UICollectionReusableView()
-              }
+                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: PlaylistHeaderCollectionReusableView.identifier, for: indexPath) as? PlaylistHeaderCollectionReusableView else {
+                    return UICollectionReusableView()
+                }
         
         if let viewModel = headerViewModel{
             header.configure(with: viewModel)
             header.delegate = self
         }
-   
+        
         return header
- 
+        
     }
+    
+        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+            collectionView.deselectItem(at: indexPath, animated: true)
+            let track = tracks[indexPath.row]
+            PlaybackPresenter.startPlayback(from: self, track: track)
+    
+        }
     
 }
 

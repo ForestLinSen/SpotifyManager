@@ -162,6 +162,7 @@ extension SearchresultViewController: UITableViewDelegate, UITableViewDataSource
             let vc = AlbumViewController(album: model)
             delegate?.showSearchResult(vc)
         case .track(model: let model):
+            // PlaybackPresenter.startPlayback(from: self, track: model)
             break
         case .playlist(model: let model):
             let vc = PlaylistViewController(playlist: model)

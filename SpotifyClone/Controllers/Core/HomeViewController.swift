@@ -401,7 +401,9 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             }
             
         case .recommendedTracks(viewModels: let viewModels):
-            break
+            if let track = self.tracks?[indexPath.row]{
+                PlaybackPresenter.startPlayback(from: self, track: track)
+            }
         }
         
     }
