@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SafariServices
 
 struct SearchSection{
     let title: String
@@ -20,11 +21,12 @@ class SearchresultViewController: UIViewController{
 
     weak var delegate: SearchResultViewControllerDelegate?
     private var sections = [SearchSection]()
-    private var viewModels = [SearchResultTableViewCellViewModel]()
+    private var viewModels = [SearchResultDefaultTableViewCellViewModel]()
     
     private let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(SearchResultTableViewCell.self, forCellReuseIdentifier: SearchResultTableViewCell.identifier)
+        tableView.register(SearchResultDefaultTableViewCell.self, forCellReuseIdentifier: SearchResultDefaultTableViewCell.identifier)
+        tableView.register(SearchResultTrackTableViewCell.self, forCellReuseIdentifier: SearchResultTrackTableViewCell.identifier)
         tableView.isHidden = true
         return tableView
     }()
@@ -81,25 +83,53 @@ class SearchresultViewController: UIViewController{
 
 extension SearchresultViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultTableViewCell.identifier, for: indexPath) as? SearchResultTableViewCell else {
-            return UITableViewCell()
-        }
+        
 
         switch sections[indexPath.section].results[indexPath.row]{
-
+            
         case .artist(model: let model):
-            break
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultDefaultTableViewCell.identifier, for: indexPath) as? SearchResultDefaultTableViewCell else {
+                return UITableViewCell()
+            }
+            
+            let viewModel = SearchResultDefaultTableViewCellViewModel(imageURL: model.images?.first?.url ?? "", mainLabel: model.name)
+            cell.configureAvatar(with: viewModel)
+            
+            return cell
         case .album(model: let model):
-            break
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultTrackTableViewCell.identifier, for: indexPath) as? SearchResultTrackTableViewCell else {
+                return UITableViewCell()
+            }
+            
+            let viewModel = SearchResultTrackViewCellViewModel(imageURL: model.images.first?.url ?? "", mainLabel: model.name, secondLabel: model.artists.first?.name ?? "")
+            
+            cell.configure(with: viewModel)
+            return cell
         case .track(model: let model):
-           break
+            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultTrackTableViewCell.identifier, for: indexPath) as? SearchResultTrackTableViewCell else {
+                return UITableViewCell()
+            }
+            
+            let viewModel = SearchResultTrackViewCellViewModel(imageURL: model.album.images.first?.url ?? "", mainLabel: model.name, secondLabel: model.artists.first?.name ?? "")
+            
+            cell.configure(with: viewModel)
+            return cell
+            
         case .playlist(model: let model):
-            cell.configure(with: SearchResultTableViewCellViewModel(imageURL: model.images.first?.url ?? "", mainLabel: model.name))
-            break
+            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultDefaultTableViewCell.identifier, for: indexPath) as? SearchResultDefaultTableViewCell else {
+                return UITableViewCell()
+            }
+            
+            let viewModel = SearchResultDefaultTableViewCellViewModel(imageURL: model.images.first?.url ?? "", mainLabel: model.name)
+            cell.configure(with: viewModel)
+            
+            return cell
         }
 
         
-        return cell
+        return UITableViewCell()
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -125,7 +155,9 @@ extension SearchresultViewController: UITableViewDelegate, UITableViewDataSource
         switch sections[indexPath.section].results[indexPath.row]{
             
         case .artist(model: let model):
-            break
+            guard let url = URL(string: model.external_urls["spotify"] ?? "") else { return }
+            let vc = SFSafariViewController(url: url)
+            present(vc, animated: true)
         case .album(model: let model):
             let vc = AlbumViewController(album: model)
             delegate?.showSearchResult(vc)
