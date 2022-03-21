@@ -13,7 +13,8 @@ class PlayerControlsView: UIView {
         let label = UILabel()
         label.font = .systemFont(ofSize: 22, weight: .semibold)
         label.text = "Music Name"
-        label.backgroundColor = .systemMint
+        label.textAlignment = .center
+        label.backgroundColor = .systemYellow
         return label
     }()
     
@@ -21,6 +22,7 @@ class PlayerControlsView: UIView {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16, weight: .regular)
         label.text = "Artist Name"
+        label.textAlignment = .center
         label.backgroundColor = .systemBlue
         return label
     }()
@@ -78,8 +80,11 @@ class PlayerControlsView: UIView {
         super.layoutSubviews()
         
         let padding = frame.width/12
-        let elementHeight = frame.height/4
+        let elementHeight = frame.height/6
+        let labelHeight = frame.height/10
         let buttonWidth = frame.width/6
+        let textWidth = frame.width/2
+        
         slider.frame = CGRect(x: padding, y: frame.height/3, width: frame.width-padding*2, height: elementHeight)
         
         playButton.frame = CGRect(x: frame.width/2-buttonWidth/2, y: slider.frame.origin.y + elementHeight,
@@ -87,6 +92,9 @@ class PlayerControlsView: UIView {
                                   height: elementHeight)
         previousButton.frame = CGRect(x: frame.width*0.25 - buttonWidth/2, y: slider.frame.origin.y + elementHeight, width: buttonWidth, height: elementHeight)
         nextButton.frame = CGRect(x: frame.width*0.75 - buttonWidth/2, y: slider.frame.origin.y + elementHeight, width: buttonWidth, height: elementHeight)
+        
+        nameLabel.frame = CGRect(x: frame.width/2 - textWidth/2, y: frame.height/10, width: textWidth, height: labelHeight)
+        subtitleLabel.frame = CGRect(x: frame.width/2 - textWidth/2, y: frame.height/10 + labelHeight, width: textWidth, height: labelHeight)
         
     }
     
