@@ -6,8 +6,17 @@
 //
 
 import UIKit
+import SDWebImage
+
+protocol PlayerDataSource: AnyObject{
+    var songName: String? { get }
+    var subtitle: String?{ get }
+    var imageURL: URL?{ get }
+}
 
 class PlayerViewController: UIViewController {
+    
+    weak var dataSource: PlayerDataSource?
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()
@@ -24,8 +33,14 @@ class PlayerViewController: UIViewController {
         view.addSubview(imageView)
         view.addSubview(playbackView)
         configureBarButtons()
+        configureWithDataSource()
+        
         
         playbackView.delegate = self
+    }
+    
+    private func configureWithDataSource(){
+        imageView.sd_setImage(with: dataSource?.imageURL)
     }
     
     override func viewDidLayoutSubviews() {
