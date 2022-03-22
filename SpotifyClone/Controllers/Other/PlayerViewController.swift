@@ -24,6 +24,8 @@ class PlayerViewController: UIViewController {
         view.addSubview(imageView)
         view.addSubview(playbackView)
         configureBarButtons()
+        
+        playbackView.delegate = self
     }
     
     override func viewDidLayoutSubviews() {
@@ -45,4 +47,20 @@ class PlayerViewController: UIViewController {
         // Actions
     }
 
+}
+
+extension PlayerViewController: PlayerControlsViewDelegate{
+    func playerControlsViewDidTapPlayPauseButton(_ playerControlsView: PlayerControlsView) {
+        print("Debug: play button tapped")
+    }
+    
+    func playerControlsViewDidTapForwardButton(_ playerControlsView: PlayerControlsView) {
+        print("Debug: play forward tapped")
+    }
+    
+    func playerControlsViewDidTapBackwardButton(_ playerControlsView: PlayerControlsView) {
+        print("Debug: play backward tapped")
+    }
+    
+    
 }

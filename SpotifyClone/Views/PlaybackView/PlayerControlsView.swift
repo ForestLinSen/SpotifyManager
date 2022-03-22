@@ -7,14 +7,22 @@
 
 import UIKit
 
+protocol PlayerControlsViewDelegate: UIViewController{
+    func playerControlsViewDidTapPlayPauseButton(_ playerControlsView: PlayerControlsView)
+    func playerControlsViewDidTapForwardButton(_ playerControlsView: PlayerControlsView)
+    func playerControlsViewDidTapBackwardButton(_ playerControlsView: PlayerControlsView)
+}
+
 class PlayerControlsView: UIView {
+    
+    weak var delegate: PlayerControlsViewDelegate?
     
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 22, weight: .semibold)
         label.text = "Music Name"
         label.textAlignment = .center
-        label.backgroundColor = .systemYellow
+        //label.backgroundColor = .systemYellow
         return label
     }()
     
@@ -23,14 +31,15 @@ class PlayerControlsView: UIView {
         label.font = .systemFont(ofSize: 16, weight: .regular)
         label.text = "Artist Name"
         label.textAlignment = .center
-        label.backgroundColor = .systemBlue
+        label.textColor = .secondaryLabel
+        //label.backgroundColor = .systemBlue
         return label
     }()
     
     private let slider: UISlider = {
         let slider = UISlider()
         slider.value = 0.5
-        slider.backgroundColor = .systemMint
+        //slider.backgroundColor = .systemMint
         return slider
     }()
     
@@ -38,7 +47,7 @@ class PlayerControlsView: UIView {
         let button = UIButton()
         let image = UIImage(systemName: "backward.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 32))
         button.setImage(image, for: .normal)
-        button.tintColor = .white
+        button.tintColor = .label
         return button
     }()
     
@@ -46,7 +55,7 @@ class PlayerControlsView: UIView {
         let button = UIButton()
         let image = UIImage(systemName: "play.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 36))
         button.setImage(image, for: .normal)
-        button.tintColor = .white
+        button.tintColor = .label
         return button
     }()
     
@@ -54,13 +63,13 @@ class PlayerControlsView: UIView {
         let button = UIButton()
         let image = UIImage(systemName: "forward.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 32))
         button.setImage(image, for: .normal)
-        button.tintColor = .white
+        button.tintColor = .label
         return button
     }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .systemRed
+        backgroundColor = .systemBackground
         
         addSubview(nameLabel)
         addSubview(subtitleLabel)
@@ -69,7 +78,24 @@ class PlayerControlsView: UIView {
         addSubview(previousButton)
         addSubview(playButton)
         addSubview(nextButton)
+        
+        playButton.addTarget(self, action: #selector(didTapPlayButton), for: .touchUpInside)
+        previousButton.addTarget(self, action: #selector(didTapPreviousButton), for: .touchUpInside)
+        nextButton.addTarget(self, action: #selector(didTapNextButton), for: .touchUpInside)
     }
+    
+    @objc private func didTapPlayButton(){
+        delegate?.playerControlsViewDidTapPlayPauseButton(self)
+    }
+    
+    @objc private func didTapPreviousButton(){
+        delegate?.playerControlsViewDidTapBackwardButton(self)
+    }
+    
+    @objc private func didTapNextButton(){
+        delegate?.playerControlsViewDidTapForwardButton(self)
+    }
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -81,7 +107,7 @@ class PlayerControlsView: UIView {
         
         let padding = frame.width/12
         let elementHeight = frame.height/6
-        let labelHeight = frame.height/10
+        let labelHeight = frame.height/9
         let buttonWidth = frame.width/6
         let textWidth = frame.width/2
         
@@ -93,8 +119,8 @@ class PlayerControlsView: UIView {
         previousButton.frame = CGRect(x: frame.width*0.25 - buttonWidth/2, y: slider.frame.origin.y + elementHeight, width: buttonWidth, height: elementHeight)
         nextButton.frame = CGRect(x: frame.width*0.75 - buttonWidth/2, y: slider.frame.origin.y + elementHeight, width: buttonWidth, height: elementHeight)
         
-        nameLabel.frame = CGRect(x: frame.width/2 - textWidth/2, y: frame.height/10, width: textWidth, height: labelHeight)
-        subtitleLabel.frame = CGRect(x: frame.width/2 - textWidth/2, y: frame.height/10 + labelHeight, width: textWidth, height: labelHeight)
+        nameLabel.frame = CGRect(x: frame.width/2 - textWidth/2, y: frame.height/12, width: textWidth, height: labelHeight)
+        subtitleLabel.frame = CGRect(x: frame.width/2 - textWidth/2, y: frame.height/12 + labelHeight, width: textWidth, height: labelHeight)
         
     }
     
