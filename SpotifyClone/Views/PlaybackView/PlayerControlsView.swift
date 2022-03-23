@@ -7,11 +7,13 @@
 
 import UIKit
 
-protocol PlayerControlsViewDelegate: UIViewController{
+protocol PlayerControlsViewDelegate: AnyObject{
     func playerControlsViewDidTapPlayPauseButton(_ playerControlsView: PlayerControlsView)
     func playerControlsViewDidTapForwardButton(_ playerControlsView: PlayerControlsView)
     func playerControlsViewDidTapBackwardButton(_ playerControlsView: PlayerControlsView)
+    func playerControlsView(_ playerControlView: PlayerControlsView, sliderDidChange value: Float)
 }
+
 
 struct PlayerControlsViewModel{
     let trackName: String
@@ -22,6 +24,7 @@ struct PlayerControlsViewModel{
 class PlayerControlsView: UIView {
     
     weak var delegate: PlayerControlsViewDelegate?
+    private var isPlaying = true
     
     private let nameLabel: UILabel = {
         let label = UILabel()
@@ -42,10 +45,9 @@ class PlayerControlsView: UIView {
         return label
     }()
     
-    private let slider: UISlider = {
+    private let volumeSlider: UISlider = {
         let slider = UISlider()
         slider.value = 0.5
-        //slider.backgroundColor = .systemMint
         return slider
     }()
     
@@ -59,7 +61,7 @@ class PlayerControlsView: UIView {
     
     private let playButton: UIButton = {
         let button = UIButton()
-        let image = UIImage(systemName: "play.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 36))
+        let image = UIImage(systemName: "pause.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 36))
         button.setImage(image, for: .normal)
         button.tintColor = .label
         return button
@@ -79,7 +81,7 @@ class PlayerControlsView: UIView {
         
         addSubview(nameLabel)
         addSubview(subtitleLabel)
-        addSubview(slider)
+        addSubview(volumeSlider)
         
         addSubview(previousButton)
         addSubview(playButton)
@@ -88,10 +90,18 @@ class PlayerControlsView: UIView {
         playButton.addTarget(self, action: #selector(didTapPlayButton), for: .touchUpInside)
         previousButton.addTarget(self, action: #selector(didTapPreviousButton), for: .touchUpInside)
         nextButton.addTarget(self, action: #selector(didTapNextButton), for: .touchUpInside)
+        
+        volumeSlider.addTarget(self, action: #selector(sliderDidChanged(_:)), for: .valueChanged)
     }
     
     @objc private func didTapPlayButton(){
         delegate?.playerControlsViewDidTapPlayPauseButton(self)
+        
+        isPlaying = !isPlaying
+        let image = UIImage(systemName:  isPlaying ? "pause.fill" : "play.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 36))
+        
+        
+        playButton.setImage(image, for: .normal)
     }
     
     @objc private func didTapPreviousButton(){
@@ -100,6 +110,11 @@ class PlayerControlsView: UIView {
     
     @objc private func didTapNextButton(){
         delegate?.playerControlsViewDidTapForwardButton(self)
+    }
+    
+    @objc private func sliderDidChanged(_ slider: UISlider){
+        let value = slider.value
+        delegate?.playerControlsView(self, sliderDidChange: value)
     }
     
     
@@ -117,13 +132,13 @@ class PlayerControlsView: UIView {
         let buttonWidth = frame.width/6
         let textWidth = frame.width/2
         
-        slider.frame = CGRect(x: padding, y: frame.height/3, width: frame.width-padding*2, height: elementHeight)
+        volumeSlider.frame = CGRect(x: padding, y: frame.height/3, width: frame.width-padding*2, height: elementHeight)
         
-        playButton.frame = CGRect(x: frame.width/2-buttonWidth/2, y: slider.frame.origin.y + elementHeight,
+        playButton.frame = CGRect(x: frame.width/2-buttonWidth/2, y: volumeSlider.frame.origin.y + elementHeight,
                                   width: buttonWidth,
                                   height: elementHeight)
-        previousButton.frame = CGRect(x: frame.width*0.25 - buttonWidth/2, y: slider.frame.origin.y + elementHeight, width: buttonWidth, height: elementHeight)
-        nextButton.frame = CGRect(x: frame.width*0.75 - buttonWidth/2, y: slider.frame.origin.y + elementHeight, width: buttonWidth, height: elementHeight)
+        previousButton.frame = CGRect(x: frame.width*0.25 - buttonWidth/2, y: volumeSlider.frame.origin.y + elementHeight, width: buttonWidth, height: elementHeight)
+        nextButton.frame = CGRect(x: frame.width*0.75 - buttonWidth/2, y: volumeSlider.frame.origin.y + elementHeight, width: buttonWidth, height: elementHeight)
         
         nameLabel.frame = CGRect(x: frame.width/2 - textWidth/2, y: frame.height/12, width: textWidth, height: labelHeight)
         subtitleLabel.frame = CGRect(x: frame.width/2 - textWidth/2, y: frame.height/12 + labelHeight, width: textWidth, height: labelHeight)

@@ -17,6 +17,7 @@ protocol PlayerDataSource: AnyObject{
 class PlayerViewController: UIViewController {
     
     weak var dataSource: PlayerDataSource?
+    weak var delegate: PlayerControlsViewDelegate?
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()
@@ -35,8 +36,8 @@ class PlayerViewController: UIViewController {
         configureBarButtons()
         configureWithDataSource()
         
+        playbackView.delegate = self.delegate
         
-        playbackView.delegate = self
     }
     
     private func configureWithDataSource(){
@@ -66,18 +67,3 @@ class PlayerViewController: UIViewController {
 
 }
 
-extension PlayerViewController: PlayerControlsViewDelegate{
-    func playerControlsViewDidTapPlayPauseButton(_ playerControlsView: PlayerControlsView) {
-        print("Debug: play button tapped")
-    }
-    
-    func playerControlsViewDidTapForwardButton(_ playerControlsView: PlayerControlsView) {
-        print("Debug: play forward tapped")
-    }
-    
-    func playerControlsViewDidTapBackwardButton(_ playerControlsView: PlayerControlsView) {
-        print("Debug: play backward tapped")
-    }
-    
-    
-}
