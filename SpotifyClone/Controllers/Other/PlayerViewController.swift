@@ -41,6 +41,8 @@ class PlayerViewController: UIViewController {
     
     private func configureWithDataSource(){
         imageView.sd_setImage(with: dataSource?.imageURL)
+        let viewModel = PlayerControlsViewModel(trackName: dataSource?.songName ?? "", artistName: dataSource?.subtitle ?? "")
+        playbackView.configure(with: viewModel)
     }
     
     override func viewDidLayoutSubviews() {

@@ -13,6 +13,12 @@ protocol PlayerControlsViewDelegate: UIViewController{
     func playerControlsViewDidTapBackwardButton(_ playerControlsView: PlayerControlsView)
 }
 
+struct PlayerControlsViewModel{
+    let trackName: String
+    let artistName: String
+}
+
+
 class PlayerControlsView: UIView {
     
     weak var delegate: PlayerControlsViewDelegate?
@@ -122,6 +128,11 @@ class PlayerControlsView: UIView {
         nameLabel.frame = CGRect(x: frame.width/2 - textWidth/2, y: frame.height/12, width: textWidth, height: labelHeight)
         subtitleLabel.frame = CGRect(x: frame.width/2 - textWidth/2, y: frame.height/12 + labelHeight, width: textWidth, height: labelHeight)
         
+    }
+    
+    func configure(with viewModel: PlayerControlsViewModel){
+        nameLabel.text = viewModel.trackName
+        subtitleLabel.text = viewModel.artistName
     }
     
 }
