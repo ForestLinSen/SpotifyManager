@@ -159,6 +159,6 @@ extension PlaylistViewController: UICollectionViewDelegate, UICollectionViewData
 
 extension PlaylistViewController: PlaylistHeaderCollectionReusableViewDelegate{
     func didTapPlayAll(_ header: PlaylistHeaderCollectionReusableView) {
-        print("Debug: playAll button tapped")
+        PlaybackPresenter.shared.startPlayback(from: self, tracks: tracks)
     }
 }

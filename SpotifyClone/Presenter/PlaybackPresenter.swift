@@ -13,6 +13,7 @@ final class PlaybackPresenter{
     
     static let shared = PlaybackPresenter()
     var player: AVPlayer?
+    var playerQueue: AVQueuePlayer?
     
     private var track: AudioTrack?
     private var tracks = [AudioTrack]()
@@ -46,9 +47,30 @@ final class PlaybackPresenter{
         }
     }
     
-    func startPlayback(from viewController: UIViewController, album: Album){}
+    func startPlayback(from viewController: UIViewController, album: Album){
+        
+    }
     
-    func startPlayback(from viewController: UIViewController, playlist: Playlist){}
+    func startPlayback(from viewController: UIViewController, tracks: [AudioTrack]){
+        self.tracks = tracks
+        self.track = nil
+        
+        let items: [AVPlayerItem] = tracks.compactMap { audioTrack in
+            guard let preview_url = audioTrack.preview_url, let url = URL(string: preview_url) else { return nil}
+            return AVPlayerItem(url: url)
+        }
+
+        
+        let vc = PlayerViewController()
+        vc.title = currentTrack?.name
+        vc.delegate = self
+        vc.dataSource = self
+        viewController.present(vc, animated: true){[weak self] in
+            self?.playerQueue = AVQueuePlayer(items: items)
+            self?.playerQueue?.volume = 0.5
+            self?.playerQueue?.play()
+        }
+    }
 }
 
 extension PlaybackPresenter: PlayerDataSource{

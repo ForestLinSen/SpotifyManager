@@ -37,7 +37,7 @@ class PlayerViewController: UIViewController {
         configureWithDataSource()
         
         playbackView.delegate = self.delegate
-        
+        print("Debug: player view did load")
     }
     
     private func configureWithDataSource(){
