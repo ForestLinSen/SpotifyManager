@@ -18,6 +18,9 @@ final class PlaybackPresenter{
     private var track: AudioTrack?
     private var tracks = [AudioTrack]()
     private var currentIndex = 0
+    private var autoPlay = true
+    
+    private var defaultVolume: Float = 0.5
     
     private var playerViewController: PlayerViewController?
     
@@ -46,7 +49,7 @@ final class PlaybackPresenter{
             }
 
             self?.player = AVPlayer(url: url)
-            self?.player?.volume = 0.5
+            self?.player?.volume = self?.defaultVolume ?? 0.5
             self?.player?.play()
         }
     }
@@ -79,15 +82,17 @@ final class PlaybackPresenter{
         
         print("Debug: start to play the next audio")
         
-        if currentIndex < self.tracks.count{
+        if currentIndex < self.tracks.count && currentIndex >= 0{
+            if autoPlay { currentIndex += 1}
+            
             guard let preview_url = URL(string: tracks[currentIndex].preview_url ?? "") else { return }
+
+            self.player = AVPlayer(url: preview_url)
+            self.player?.volume = defaultVolume
+            self.player?.play()
             
             playerViewController?.configureWithDataSource()
-            
-            self.player = AVPlayer(url: preview_url)
-            self.player?.volume = 0.2
-            self.player?.play()
-            currentIndex += 1
+            autoPlay = true
         }else{
             return
         }
@@ -120,7 +125,8 @@ extension PlaybackPresenter: PlayerDataSource{
 extension PlaybackPresenter: PlayerControlsViewDelegate{
     func playerControlsView(_ playerControlView: PlayerControlsView, sliderDidChange value: Float) {
         //print("Debug: slider value: \(value)")
-        player?.volume = value
+        defaultVolume = value
+        player?.volume = defaultVolume
     }
     
     func playerControlsViewDidTapPlayPauseButton(_ playerControlsView: PlayerControlsView) {
@@ -136,11 +142,19 @@ extension PlaybackPresenter: PlayerControlsViewDelegate{
     }
     
     func playerControlsViewDidTapForwardButton(_ playerControlsView: PlayerControlsView) {
-        print("Debug: play forward tapped")
+        if(currentIndex < tracks.count){
+            currentIndex += 1
+            autoPlay = false
+            preparePlayAudio()
+        }
     }
     
     func playerControlsViewDidTapBackwardButton(_ playerControlsView: PlayerControlsView) {
-        print("Debug: play backward tapped")
+        if(currentIndex > 0){
+            currentIndex -= 1
+            autoPlay = false
+            preparePlayAudio()
+        }
     }
     
     
