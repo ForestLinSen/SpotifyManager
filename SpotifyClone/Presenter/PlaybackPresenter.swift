@@ -19,6 +19,8 @@ final class PlaybackPresenter{
     private var tracks = [AudioTrack]()
     private var currentIndex = 0
     
+    private var playerViewController: PlayerViewController?
+    
     private var currentTrack: AudioTrack? {
         if let track = track, tracks.isEmpty{
             return track
@@ -63,52 +65,13 @@ final class PlaybackPresenter{
         
         preparePlayAudio()
         
-        let vc = PlayerViewController()
-        vc.title = tracks[currentIndex].name
-        vc.delegate = self
-        vc.dataSource = self
-        let nav = UINavigationController(rootViewController: vc)
+        playerViewController = PlayerViewController()
+        playerViewController!.title = tracks[currentIndex].name
+        playerViewController!.delegate = self
+        playerViewController!.dataSource = self
+        let nav = UINavigationController(rootViewController: playerViewController!)
         
         viewController.present(nav, animated: true)
-        
-        
-
-//        let assets: [AVURLAsset] = tracks.compactMap { audioTrack in
-//            guard let preview_url = audioTrack.preview_url, let url = URL(string: preview_url) else { return nil }
-//            return AVURLAsset(url: url)
-//        }
-//
-//
-//        let vc = PlayerViewController()
-//        vc.title = currentTrack?.name
-//        vc.delegate = self
-//        vc.dataSource = self
-//        let nav = UINavigationController(rootViewController: vc)
-//
-//        var items: [AVPlayerItem] = assets.compactMap { asset in
-//            return AVPlayerItem(asset: asset)
-//        }
-//
-//        self.playerQueue = AVQueuePlayer(playerItem: items.first)
-//        items.removeFirst()
-//
-//        self.playerQueue?.volume = 0.2
-//        self.playerQueue?.play()
-//
-//        DispatchQueue.global(qos: .background).async {[weak self] in
-//            items.forEach { item in
-//                print("Debug: Add queue: \(item)")
-//                self?.playerQueue?.insert(item, after: self?.playerQueue?.items().last)
-//            }
-//        }
-//
-//
-//        viewController.present(nav, animated: true){[weak self] in
-//
-//            self?.playerQueue = AVQueuePlayer(items: items)
-//            self?.playerQueue?.volume = 0.5
-//            self?.playerQueue?.play()
-//        }
 
     }
     
@@ -118,6 +81,9 @@ final class PlaybackPresenter{
         
         if currentIndex < self.tracks.count{
             guard let preview_url = URL(string: tracks[currentIndex].preview_url ?? "") else { return }
+            
+            playerViewController?.configureWithDataSource()
+            
             self.player = AVPlayer(url: preview_url)
             self.player?.volume = 0.2
             self.player?.play()
@@ -138,15 +104,15 @@ final class PlaybackPresenter{
 
 extension PlaybackPresenter: PlayerDataSource{
     var songName: String? {
-        return currentTrack?.name
+        return tracks[currentIndex].name
     }
     
     var subtitle: String? {
-        return currentTrack?.artists.first?.name
+        return tracks[currentIndex].artists.first?.name
     }
     
     var imageURL: URL? {
-        return URL(string: currentTrack?.album.images.first?.url ?? "")
+        return URL(string: tracks[currentIndex].album.images.first?.url ?? "")
     }
 }
 
@@ -165,7 +131,6 @@ extension PlaybackPresenter: PlayerControlsViewDelegate{
             }else{
                 player.play()
             }
-            print("Debug: play button tapped")
         }
         
     }

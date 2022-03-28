@@ -40,7 +40,7 @@ class PlayerViewController: UIViewController {
         print("Debug: player view did load")
     }
     
-    private func configureWithDataSource(){
+    func configureWithDataSource(){
         imageView.sd_setImage(with: dataSource?.imageURL)
         let viewModel = PlayerControlsViewModel(trackName: dataSource?.songName ?? "", artistName: dataSource?.subtitle ?? "")
         playbackView.configure(with: viewModel)
