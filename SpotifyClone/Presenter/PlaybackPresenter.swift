@@ -17,6 +17,8 @@ final class PlaybackPresenter{
     
     private var track: AudioTrack?
     private var tracks = [AudioTrack]()
+    private var currentIndex = 0
+    
     private var currentTrack: AudioTrack? {
         if let track = track, tracks.isEmpty{
             return track
@@ -52,24 +54,85 @@ final class PlaybackPresenter{
     }
     
     func startPlayback(from viewController: UIViewController, tracks: [AudioTrack]){
-        self.tracks = tracks
         self.track = nil
-        
-        let items: [AVPlayerItem] = tracks.compactMap { audioTrack in
-            guard let preview_url = audioTrack.preview_url, let url = URL(string: preview_url) else { return nil}
-            return AVPlayerItem(url: url)
+        for track in tracks {
+            if track.preview_url != nil{
+                self.tracks.append(track)
+            }
         }
-
+        
+        preparePlayAudio()
         
         let vc = PlayerViewController()
-        vc.title = currentTrack?.name
+        vc.title = tracks[currentIndex].name
         vc.delegate = self
         vc.dataSource = self
-        viewController.present(vc, animated: true){[weak self] in
-            self?.playerQueue = AVQueuePlayer(items: items)
-            self?.playerQueue?.volume = 0.5
-            self?.playerQueue?.play()
+        let nav = UINavigationController(rootViewController: vc)
+        
+        viewController.present(nav, animated: true)
+        
+        
+
+//        let assets: [AVURLAsset] = tracks.compactMap { audioTrack in
+//            guard let preview_url = audioTrack.preview_url, let url = URL(string: preview_url) else { return nil }
+//            return AVURLAsset(url: url)
+//        }
+//
+//
+//        let vc = PlayerViewController()
+//        vc.title = currentTrack?.name
+//        vc.delegate = self
+//        vc.dataSource = self
+//        let nav = UINavigationController(rootViewController: vc)
+//
+//        var items: [AVPlayerItem] = assets.compactMap { asset in
+//            return AVPlayerItem(asset: asset)
+//        }
+//
+//        self.playerQueue = AVQueuePlayer(playerItem: items.first)
+//        items.removeFirst()
+//
+//        self.playerQueue?.volume = 0.2
+//        self.playerQueue?.play()
+//
+//        DispatchQueue.global(qos: .background).async {[weak self] in
+//            items.forEach { item in
+//                print("Debug: Add queue: \(item)")
+//                self?.playerQueue?.insert(item, after: self?.playerQueue?.items().last)
+//            }
+//        }
+//
+//
+//        viewController.present(nav, animated: true){[weak self] in
+//
+//            self?.playerQueue = AVQueuePlayer(items: items)
+//            self?.playerQueue?.volume = 0.5
+//            self?.playerQueue?.play()
+//        }
+
+    }
+    
+    @objc private func preparePlayAudio(){
+        
+        print("Debug: start to play the next audio")
+        
+        if currentIndex < self.tracks.count{
+            guard let preview_url = URL(string: tracks[currentIndex].preview_url ?? "") else { return }
+            self.player = AVPlayer(url: preview_url)
+            self.player?.volume = 0.2
+            self.player?.play()
+            currentIndex += 1
+        }else{
+            return
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(preparePlayAudio), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
+
+    }
+    
+    // Remove Observer
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
 
@@ -95,12 +158,16 @@ extension PlaybackPresenter: PlayerControlsViewDelegate{
     }
     
     func playerControlsViewDidTapPlayPauseButton(_ playerControlsView: PlayerControlsView) {
-        if player?.timeControlStatus == .playing{
-            player?.pause()
-        }else{
-            player?.play()
+        
+        if let player = player{
+            if player.timeControlStatus == .playing{
+                player.pause()
+            }else{
+                player.play()
+            }
+            print("Debug: play button tapped")
         }
-        print("Debug: play button tapped")
+        
     }
     
     func playerControlsViewDidTapForwardButton(_ playerControlsView: PlayerControlsView) {
