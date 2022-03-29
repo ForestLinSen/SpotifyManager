@@ -402,7 +402,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             
         case .recommendedTracks(viewModels: let viewModels):
             if let track = self.tracks?[indexPath.row]{
-                PlaybackPresenter.shared.startPlayback(from: self, track: track)
+                PlaybackPresenter.shared.startPlayback(from: self, tracks: self.tracks!, trackNumber: indexPath.row)
             }
         }
         

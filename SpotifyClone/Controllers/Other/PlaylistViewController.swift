@@ -148,12 +148,12 @@ extension PlaylistViewController: UICollectionViewDelegate, UICollectionViewData
         
     }
     
-        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            collectionView.deselectItem(at: indexPath, animated: true)
-            let track = tracks[indexPath.row]
-            PlaybackPresenter.shared.startPlayback(from: self, track: track)
-    
-        }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let trackNumber = indexPath.row
+        PlaybackPresenter.shared.startPlayback(from: self, tracks: tracks, trackNumber: trackNumber)
+
+    }
     
 }
 

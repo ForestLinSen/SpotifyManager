@@ -34,36 +34,42 @@ final class PlaybackPresenter{
         return nil
     }
     
-    func startPlayback(from viewController: UIViewController, track: AudioTrack){
-
-        let vc = PlayerViewController()
-        vc.title = track.name
-        vc.dataSource = self
-        vc.delegate = self
-        self.track = track
-        let nav = UINavigationController(rootViewController: vc)
-        viewController.present(nav, animated: true){[weak self] in
-            guard let url = URL(string: track.preview_url ?? "") else {
-                print("Debug: no preview url")
-                return
-            }
-
-            self?.player = AVPlayer(url: url)
-            self?.player?.volume = self?.defaultVolume ?? 0.5
-            self?.player?.play()
-        }
-    }
+//    func startPlayback(from viewController: UIViewController, track: AudioTrack, trackNumber: Int){
+//
+//        let vc = PlayerViewController()
+//        vc.title = track.name
+//        vc.dataSource = self
+//        vc.delegate = self
+//        self.track = track
+//        let nav = UINavigationController(rootViewController: vc)
+//        viewController.present(nav, animated: true){[weak self] in
+//            guard let url = URL(string: track.preview_url ?? "") else {
+//                print("Debug: no preview url")
+//                return
+//            }
+//
+//            self?.player = AVPlayer(url: url)
+//            self?.player?.volume = self?.defaultVolume ?? 0.5
+//            self?.player?.play()
+//            self?.currentIndex = trackNumber
+//        }
+//    }
+//
+//    func startPlayback(from viewController: UIViewController, album: Album){
+//
+//    }
     
-    func startPlayback(from viewController: UIViewController, album: Album){
-        
-    }
-    
-    func startPlayback(from viewController: UIViewController, tracks: [AudioTrack]){
-        self.track = nil
+    func startPlayback(from viewController: UIViewController, tracks: [AudioTrack], trackNumber: Int = 0){
+        //self.track = nil
         for track in tracks {
             if track.preview_url != nil{
                 self.tracks.append(track)
             }
+        }
+        
+        if trackNumber != currentIndex{
+            currentIndex = trackNumber
+            autoPlay = false
         }
         
         preparePlayAudio()
