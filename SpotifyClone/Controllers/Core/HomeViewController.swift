@@ -401,8 +401,17 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             }
             
         case .recommendedTracks(viewModels: let viewModels):
+            
             if let track = self.tracks?[indexPath.row]{
-                PlaybackPresenter.shared.startPlayback(from: self, tracks: self.tracks!, trackNumber: indexPath.row)
+                if track.preview_url == nil{
+                    let alertViewController = UIAlertController(title: "Can't Play This Audio", message: "No preview url for this audio, please choose another one.", preferredStyle: .alert)
+                    alertViewController.addAction(UIAlertAction(title: "OK", style: .cancel))
+                    present(alertViewController, animated: true)
+                }else{
+                    
+                    PlaybackPresenter.shared.playSingleTrack(from: self, track: track)
+                }
+                
             }
         }
         
