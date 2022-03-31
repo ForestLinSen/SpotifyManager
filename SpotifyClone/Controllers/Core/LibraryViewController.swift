@@ -11,6 +11,7 @@ class LibraryViewController: UIViewController {
 
     private let playlistVC = LibraryPlaylistViewController()
     private let albumVC = LibraryAlbumsViewController()
+    private let toggleView = LibraryToggleView()
     
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -23,9 +24,12 @@ class LibraryViewController: UIViewController {
         view.backgroundColor = .systemBackground
         
         view.addSubview(scrollView)
+        view.addSubview(toggleView)
+        
         scrollView.delegate = self
         scrollView.backgroundColor = .systemYellow
         scrollView.contentSize = CGSize(width: view.frame.width*2, height: scrollView.frame.height)
+        toggleView.delegate = self
         
         addchldren()
     }
@@ -36,6 +40,7 @@ class LibraryViewController: UIViewController {
         scrollView.frame = CGRect(x: 0, y: view.safeAreaInsets.top+55,
                                   width: view.frame.width,
                                   height: view.frame.height-view.safeAreaInsets.top-view.safeAreaInsets.bottom-55)
+        toggleView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.frame.width, height: view.frame.height/15)
     }
     
     func addchldren(){
@@ -53,5 +58,23 @@ class LibraryViewController: UIViewController {
 }
 
 extension LibraryViewController: UIScrollViewDelegate{
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.x > scrollView.frame.width/2{
+            toggleView.state = .Album
+            toggleView.updateIndicator()
+        }else{
+            toggleView.state = .Playlist
+            toggleView.updateIndicator()
+        }
+    }
+}
+
+extension LibraryViewController: LibraryToggleViewDelegate{
+    func libraryToggleViewDidTapPlaylist(_ toggleView: LibraryToggleView) {
+        scrollView.setContentOffset(.zero, animated: true)
+    }
     
+    func libraryToggleViewDidTapAlbum(_ toggleView: LibraryToggleView) {
+        scrollView.setContentOffset(CGPoint(x: scrollView.frame.width, y: 0), animated: true)
+    }
 }
