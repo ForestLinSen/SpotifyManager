@@ -206,6 +206,7 @@
 		B92591E727B54F090019031E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				B93F079027F554E000A598E5 /* Library */,
 				B97690E427E5DCE1000B9847 /* PlaybackView */,
 				B9437F2627E23A3400945D96 /* SearchView */,
 				B968A00F27D478DF00DB34F0 /* Supplement */,
@@ -228,6 +229,13 @@
 			children = (
 			);
 			path = Products;
+			sourceTree = "<group>";
+		};
+		B93F079027F554E000A598E5 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Library;
 			sourceTree = "<group>";
 		};
 		B940ECFC27B96AA8006B3332 /* Models */ = {

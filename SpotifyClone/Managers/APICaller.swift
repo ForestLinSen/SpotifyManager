@@ -187,7 +187,6 @@ final class APICaller{
                     //print("Debug: album detail \(jsonData)")
                     
                     let albumDetail = try JSONDecoder().decode(AlbumDetailResponse.self, from: data)
-                    print("Debug: album detail: \(albumDetail)")
                     completion(.success(albumDetail))
                     
                 }catch{

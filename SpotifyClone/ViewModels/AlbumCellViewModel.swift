@@ -10,4 +10,5 @@ import Foundation
 struct AlbumCellViewModel{
     let name: String
     let artist: String
+    let preview_url: String?
 }

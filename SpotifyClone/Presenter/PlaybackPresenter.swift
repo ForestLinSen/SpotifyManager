@@ -44,7 +44,7 @@ final class PlaybackPresenter{
     }
     
     
-    func startPlayback(from viewController: UIViewController, tracks: [AudioTrack], trackNumber: Int = 0){
+    func startPlayback(from viewController: UIViewController, tracks: [AudioTrack], trackNumber: Int = 0, playAll: Bool = false){
         //self.track = nil
         
         print("Debug: current index: \(currentIndex)")
@@ -54,6 +54,8 @@ final class PlaybackPresenter{
                 self.tracks.append(track)
             }
         }
+        
+        playAllMode = playAll
         
         if trackNumber != currentIndex{
             currentIndex = trackNumber

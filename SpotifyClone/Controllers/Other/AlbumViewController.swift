@@ -19,6 +19,7 @@ class AlbumViewController: UIViewController {
     }()
     
     private var viewModels = [AlbumCellViewModel]()
+    private var tracks = [AudioTrack]()
     private var headerViewModel: PlaylistHeaderViewModel?
     
     static func createLayoutSection() -> NSCollectionLayoutSection{
@@ -69,7 +70,11 @@ class AlbumViewController: UIViewController {
                         imageURL: albumResponse.images.first?.url ?? "")
                     
                     self?.viewModels = albumResponse.tracks.items.compactMap({
-                        return AlbumCellViewModel(name: $0.name, artist: $0.artists.first?.name ?? "Unknown")
+                        return AlbumCellViewModel(name: $0.name, artist: $0.artists.first?.name ?? "Unknown", preview_url: $0.preview_url)
+                    })
+                    
+                    self?.tracks = albumResponse.tracks.items.compactMap({ albumTrack in
+                        return AudioTrack(album: album, artists: album.artists, disc_number: 0, duration_ms: 0, explicit: false, external_urls: [:], id: albumTrack.id, name: albumTrack.name, popularity: 0, preview_url: albumTrack.preview_url)
                     })
                     
                     self?.collectionView.reloadData()
@@ -81,6 +86,8 @@ class AlbumViewController: UIViewController {
                 break
             }
         }
+        
+        
     }
     
     required init?(coder: NSCoder) {
@@ -100,7 +107,7 @@ class AlbumViewController: UIViewController {
         view.addSubview(collectionView)
         collectionView.dataSource = self
         collectionView.delegate = self
-
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -118,6 +125,8 @@ extension AlbumViewController: UICollectionViewDataSource, UICollectionViewDeleg
         guard kind == UICollectionView.elementKindSectionHeader, let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: PlaylistHeaderCollectionReusableView.identifier, for: indexPath) as? PlaylistHeaderCollectionReusableView else {
             return UICollectionReusableView()
         }
+        
+        header.delegate = self
         
         if let viewModel = headerViewModel{
             header.configure(with: viewModel)
@@ -138,5 +147,23 @@ extension AlbumViewController: UICollectionViewDataSource, UICollectionViewDeleg
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let track = self.tracks[indexPath.row]
+        if track.preview_url == nil{
+            let alertViewController = UIAlertController(title: "Can't Play This Audio", message: "No preview url for this audio, please choose another one.", preferredStyle: .alert)
+            alertViewController.addAction(UIAlertAction(title: "OK", style: .cancel))
+            present(alertViewController, animated: true)
+        }else{
+            
+            PlaybackPresenter.shared.playSingleTrack(from: self, track: track)
+        }
+    }
     
+}
+
+
+extension AlbumViewController: PlaylistHeaderCollectionReusableViewDelegate{
+    func didTapPlayAll(_ header: PlaylistHeaderCollectionReusableView) {
+        PlaybackPresenter.shared.startPlayback(from: self, tracks: tracks)
+    }
 }
