@@ -29,17 +29,19 @@ class ProfileViewController: UIViewController{
         tableView.delegate = self
         tableView.dataSource = self
         
-        APICaller.shared.getCurrentUserProfile { [weak self] result in
-            switch result{
-            case .success(let model):
-                DispatchQueue.main.async {
+        if let data = UserDefaults.standard.object(forKey: "userProfile") as? Data{
+            do{
+                let model = try JSONDecoder().decode(UserProfile.self, from: data)
+                DispatchQueue.main.async { [weak self] in
                     self?.updateUI(with: model)
                 }
-            case .failure(let error):
-                print("Debug: error in fetching user profile \(error.localizedDescription)")
-                self?.failedToGetProfile()
-            }
+            }catch{}
+            
+            
+        }else{
+            failedToGetProfile()
         }
+        
     }
     
     override func viewDidLayoutSubviews() {

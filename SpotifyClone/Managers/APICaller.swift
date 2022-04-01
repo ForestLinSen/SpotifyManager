@@ -19,7 +19,7 @@ final class APICaller{
         createRequest(with: URL(string: K.baseAPIURL + "/me"), type: .GET) { request in
             let task = URLSession.shared.dataTask(with: request) { data, _, error in
                 guard let data = data, error == nil else {
-                    print("Debug: cannot decode user profile")
+                    print("Debug: cannot fetch user profile")
                     completion(.failure(APIError.failedToGetData))
                     return
                 }
@@ -201,7 +201,7 @@ final class APICaller{
     }
     
     
-    // MARK: - Playlist details
+    // MARK: - Playlist
     func getPlaylistDetail(playlistID: String, completion: @escaping (Result<PlaylistDetailResponse, Error>) -> Void){
         let requestString = K.baseAPIURL + "/playlists/\(playlistID)"
         
@@ -226,6 +226,39 @@ final class APICaller{
             }
             
             task.resume()
+        }
+    }
+    
+    
+    func getCurrentUserPlaylist(completion: @escaping ((Result<UserPlaylistResponse, Error>) -> Void)){
+        
+        if let data = UserDefaults.standard.object(forKey: "userProfile") as? Data{
+            do{
+                let userProfile = try JSONDecoder().decode(UserProfile.self, from: data)
+                let user_id = userProfile.id
+                let requestString = K.baseAPIURL + "/users/\(user_id)/playlists?limit=2"
+                
+                createRequest(with: URL(string: requestString), type: .GET) { request in
+                    let task = URLSession.shared.dataTask(with: request) { data, _, error in
+                        guard let data = data, error == nil else {
+                            completion(.failure(APIError.failedToGetData))
+                            print("Debug: cannot fetch user playlist")
+                            return
+                        }
+                        
+                        do{
+                            let userPlaylists = try JSONDecoder().decode(UserPlaylistResponse.self, from: data)
+                            completion(.success(userPlaylists))
+                        }catch{
+                            print("Debug: cannot convert data into user playlists \(error)")
+                            completion(.failure(APIError.failedToConvertData))
+                        }
+                    }
+                    
+                    task.resume()
+                }
+                
+            }catch{}
         }
     }
     

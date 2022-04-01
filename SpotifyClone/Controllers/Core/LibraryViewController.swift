@@ -32,6 +32,15 @@ class LibraryViewController: UIViewController {
         toggleView.delegate = self
         
         addchldren()
+        
+        APICaller.shared.getCurrentUserPlaylist { result in
+            switch result{
+            case .success(let userPlaylists):
+                print("Debug: user playlists response:\(userPlaylists)")
+            case .failure(_):
+                print("Debug: cannot get user playlists")
+            }
+        }
     }
     
     override func viewDidLayoutSubviews() {

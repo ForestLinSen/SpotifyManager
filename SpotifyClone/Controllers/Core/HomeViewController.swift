@@ -51,7 +51,7 @@ class HomeViewController: UIViewController{
         
         layoutCollectionView()
         fetchData()
-        
+        fetchUserProfile()
         
         
     }
@@ -74,6 +74,25 @@ class HomeViewController: UIViewController{
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.backgroundColor = .systemBackground
+    }
+    
+    /// cache user profile data
+    private func fetchUserProfile(){
+        if(UserDefaults.standard.object(forKey: "userProfile") == nil){
+            APICaller.shared.getCurrentUserProfile { result in
+                switch result{
+                case .success(let userProfile):
+                    do{
+                        let data = try JSONEncoder().encode(userProfile)
+                        UserDefaults.standard.set(data, forKey: "userProfile")
+                    }catch{
+                        print("Debug: cannot cache user profile data")
+                    }
+                case .failure(_):
+                    print("Debug: cannot found user profile data")
+                }
+            }
+        }
     }
     
     private func fetchData(){
