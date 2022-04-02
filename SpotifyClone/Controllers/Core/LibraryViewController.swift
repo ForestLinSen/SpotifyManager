@@ -36,11 +36,44 @@ class LibraryViewController: UIViewController {
         APICaller.shared.getCurrentUserPlaylist { result in
             switch result{
             case .success(let userPlaylists):
-                print("Debug: user playlists response:\(userPlaylists)")
+                //print("Debug: user playlists response:\(userPlaylists)")
+                break
             case .failure(_):
                 print("Debug: cannot get user playlists")
             }
         }
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(addPlaylist))
+    }
+    
+    @objc func addPlaylist(){
+        let alert = UIAlertController(title: "New Playlist", message: "Create a new playlist", preferredStyle: .alert)
+        
+        alert.addTextField{ textField in
+            textField.placeholder = "New Playlist"
+        }
+
+        alert.addAction(UIAlertAction(title: "Create", style: .default, handler: {[weak self] _ in
+            if let title = alert.textFields?.first?.text {
+                print("Debug: begin to create a playlist")
+                APICaller.shared.createPlaylist(with: title) { success in
+                    if(success){
+                        print("Debug: successfully creating a new playlist")
+                    }else{
+                        print("Debug: failed to create the playlist")
+                    }
+                }
+                
+            }else{
+                let titleAlert = UIAlertController(title: "No Title", message: "Please fill the title", preferredStyle: .alert)
+                titleAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+                self?.present(titleAlert, animated: true)
+            }
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        
+        present(alert, animated: true)
     }
     
     override func viewDidLayoutSubviews() {

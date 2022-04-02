@@ -263,6 +263,52 @@ final class APICaller{
     }
     
     
+    func createPlaylist(with name: String, description: String = "", completion: @escaping ((Bool) -> Void)){
+        
+        if let data = UserDefaults.standard.object(forKey: "userProfile") as? Data{
+            do{
+                let userProfile = try JSONDecoder().decode(UserProfile.self, from: data)
+                let userID = userProfile.id
+                
+                let requestString = K.baseAPIURL + "/users/\(userID)/playlists"
+                
+                
+                createRequest(with: URL(string: requestString), type: .POST) { request in
+                    var request = request
+                    let newPlaylistData: [String: Any] = [
+                        "name": name,
+                        "public": false
+                    ]
+                    
+                    do{
+                        let data = try JSONSerialization.data(withJSONObject: newPlaylistData, options: .fragmentsAllowed)
+                        request.httpBody = data
+                        
+                        let task = URLSession.shared.dataTask(with: request) { _, _, error in
+                            
+                            guard error == nil else {
+                                print("Debug: failed to create playlist")
+                                return
+                            }
+                            
+                            completion(true)
+                            //print("Debug: successfully add new playlist")
+
+                        }
+                        
+                        task.resume()
+                        
+                    }catch{}
+                    
+                }
+                
+            }catch{}
+        }
+        
+        
+    }
+    
+    
     // MARK: - Caregories & Category Playlists
     func getCategories(completion: @escaping (Result<CategoriesResponse, Error>) -> Void){
         let requestString = K.baseAPIURL + "/browse/categories"
