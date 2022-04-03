@@ -31,7 +31,6 @@ class PlayerControlsView: UIView {
         label.font = .systemFont(ofSize: 22, weight: .semibold)
         label.text = "Music Name"
         label.textAlignment = .center
-        //label.backgroundColor = .systemYellow
         return label
     }()
     
@@ -41,7 +40,6 @@ class PlayerControlsView: UIView {
         label.text = "Artist Name"
         label.textAlignment = .center
         label.textColor = .secondaryLabel
-        //label.backgroundColor = .systemBlue
         return label
     }()
     
