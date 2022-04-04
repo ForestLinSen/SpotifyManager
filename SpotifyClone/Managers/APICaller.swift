@@ -236,7 +236,7 @@ final class APICaller{
             do{
                 let userProfile = try JSONDecoder().decode(UserProfile.self, from: data)
                 let user_id = userProfile.id
-                let requestString = K.baseAPIURL + "/users/\(user_id)/playlists?limit=2"
+                let requestString = K.baseAPIURL + "/users/\(user_id)/playlists?limit=5"
                 
                 createRequest(with: URL(string: requestString), type: .GET) { request in
                     let task = URLSession.shared.dataTask(with: request) { data, _, error in

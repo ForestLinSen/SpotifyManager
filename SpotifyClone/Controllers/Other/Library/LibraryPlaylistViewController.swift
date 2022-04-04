@@ -12,7 +12,18 @@ class LibraryPlaylistViewController: UIViewController {
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewCompositionalLayout(sectionProvider: { sectionIndex, _ in
         LibraryPlaylistViewController.createLayoutSection()
     }))
-
+    
+    private var playlists = [UserPlaylist]()
+    
+//    init(playlists: [Playlist]){
+//        super.init(nibName: nil, bundle: nil)
+//        self.playlists = playlists
+//    }
+//
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+    
     override func viewDidLoad(){
         super.viewDidLoad()
         print("Debug: library playlist view didLayout")
@@ -29,8 +40,12 @@ class LibraryPlaylistViewController: UIViewController {
         // item
         let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
         
+        item.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
+        
         // group
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.15)), subitem: item, count: 1)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.25)), subitem: item, count: 2)
+        
+        group.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
         
         // section
         let section = NSCollectionLayoutSection(group: group)
@@ -48,7 +63,7 @@ class LibraryPlaylistViewController: UIViewController {
 
 extension LibraryPlaylistViewController: UICollectionViewDelegate, UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return playlists.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -57,10 +72,23 @@ extension LibraryPlaylistViewController: UICollectionViewDelegate, UICollectionV
             return UICollectionViewCell()
         }
         
-        cell.configure(with: FeaturePlaylistCellViewModel(name: "Name", imageURL: URL(string: ""), creatorName: "Wyman"))
-        cell.backgroundColor = .systemBlue
+        let userPlaylist = playlists[indexPath.row]
+        
+        cell.configure(with: FeaturePlaylistCellViewModel(name: userPlaylist.name,
+                                                          imageURL: URL(string: userPlaylist.images.first?.url ?? ""),
+                                                          creatorName: userPlaylist.owner.display_name))
         
         return cell
+    }
+    
+    func configure(with playlists: [UserPlaylist]){
+        self.playlists = playlists
+        
+        DispatchQueue.main.async {[weak self] in
+            self?.collectionView.reloadData()
+        }
+        
+        
     }
     
     

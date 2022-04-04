@@ -47,8 +47,8 @@ class FeaturePlaylistCollectionViewCell: UICollectionViewCell{
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let imageSize = contentView.frame.height / 1.4
-        let labelHeight = contentView.frame.height / 7
+        let imageSize = contentView.frame.height / 1.7
+        let labelHeight = contentView.frame.height / 5
         let labelWidth = contentView.frame.width / 1.5
         
         imageView.frame = CGRect(x: contentView.frame.width/2 - imageSize/2,

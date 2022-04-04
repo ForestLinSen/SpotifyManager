@@ -34,11 +34,11 @@ class LibraryViewController: UIViewController {
         addchldren()
         
         
-        APICaller.shared.getCurrentUserPlaylist { result in
+        APICaller.shared.getCurrentUserPlaylist { [weak self] result in
             switch result{
             case .success(let userPlaylists):
-                //print("Debug: user playlists response:\(userPlaylists)")
-                break
+                
+                self?.playlistVC.configure(with: userPlaylists.items)
             case .failure(_):
                 print("Debug: cannot get user playlists")
             }
