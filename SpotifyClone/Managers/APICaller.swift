@@ -304,8 +304,27 @@ final class APICaller{
                 
             }catch{}
         }
+    }
+    
+    
+    func getPlaylistTracks(with playlistID: String, completion: @escaping ((Result<PlaylistTracks,Error>) -> Void)){
+        let requestString = K.baseAPIURL + "/playlists/\(playlistID)/tracks"
         
-        
+        createRequest(with: URL(string: requestString), type: .GET) { request in
+            let task = URLSession.shared.dataTask(with: request) { data, _, error in
+                guard let data = data, error == nil else {
+                    return
+                }
+                
+                do{
+                    let tracks = try JSONDecoder().decode(PlaylistTracks.self, from: data)
+                    completion(.success(tracks))
+                }catch{}
+
+            }
+            
+            task.resume()
+        }
     }
     
     

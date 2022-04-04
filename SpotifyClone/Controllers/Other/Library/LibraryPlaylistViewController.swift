@@ -81,14 +81,28 @@ extension LibraryPlaylistViewController: UICollectionViewDelegate, UICollectionV
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let playlist = playlists[indexPath.row]
+        APICaller.shared.getPlaylistTracks(with: playlist.id) {[weak self] result in
+            
+            
+            DispatchQueue.main.async {
+                let playlist = Playlist(description: playlist.description, external_urls: [:], href: "", id: playlist.id, images: playlist.images, name: playlist.name, owner: playlist.owner, snapshot_id: playlist.snapshot_id, tracks: Tracks(href: "", total: 0), type: "", uri: "")
+                let vc = PlaylistViewController(playlist: playlist)
+                vc.navigationItem.largeTitleDisplayMode = .never
+                self?.navigationController?.pushViewController(vc, animated: true)
+            }
+            
+            
+        }
+    }
+    
     func configure(with playlists: [UserPlaylist]){
         self.playlists = playlists
         
         DispatchQueue.main.async {[weak self] in
             self?.collectionView.reloadData()
         }
-        
-        
     }
     
     
