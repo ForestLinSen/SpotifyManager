@@ -328,6 +328,52 @@ final class APICaller{
     }
     
     
+    func addTrackToPlaylist(playlistID: String, trackURI: String, completion: @escaping ((Bool) -> Void)){
+        let requestString = K.baseAPIURL + "/playlists/\(playlistID)/tracks"
+        
+        createRequest(with: URL(string: requestString), type: .POST) { request in
+            var request = request
+            
+            AuthManager.shared.withValideToken { token in
+                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+                
+                do{
+                    let jsonData: [String: [String]] = ["uris": [trackURI]]
+                    request.httpBody = try JSONSerialization.data(withJSONObject: jsonData, options: .fragmentsAllowed)
+                    
+                    let task = URLSession.shared.dataTask(with: request) { data, _, error in
+                        guard let data = data, error == nil else{
+                            print("Debug: cannot add this track to playlist")
+                            completion(false)
+                            return
+                        }
+                        
+                        do{
+                            let jsonData = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
+                            print("Debug: response of track added: \(jsonData)")
+                            print("Debug: track added")
+                            completion(true)
+                        }catch{
+                            print("Debug: something wrong v1 : \(error)")
+                        }
+                        
+                        
+                    }
+                    
+                    task.resume()
+                }catch{
+                    print("Debug: something wrong v2 : \(error)")
+                }
+                
+                
+            }
+            
+            
+        }
+    }
+    
+    
     // MARK: - Caregories & Category Playlists
     func getCategories(completion: @escaping (Result<CategoriesResponse, Error>) -> Void){
         let requestString = K.baseAPIURL + "/browse/categories"

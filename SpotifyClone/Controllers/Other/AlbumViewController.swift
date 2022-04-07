@@ -74,7 +74,7 @@ class AlbumViewController: UIViewController {
                     })
                     
                     self?.tracks = albumResponse.tracks.items.compactMap({ albumTrack in
-                        return AudioTrack(album: album, artists: album.artists, disc_number: 0, duration_ms: 0, explicit: false, external_urls: [:], id: albumTrack.id, name: albumTrack.name, popularity: 0, preview_url: albumTrack.preview_url)
+                        return AudioTrack(album: album, artists: album.artists, disc_number: 0, duration_ms: 0, explicit: false, external_urls: [:], id: albumTrack.id, name: albumTrack.name, popularity: 0, preview_url: albumTrack.preview_url, uri: "")
                     })
                     
                     self?.collectionView.reloadData()

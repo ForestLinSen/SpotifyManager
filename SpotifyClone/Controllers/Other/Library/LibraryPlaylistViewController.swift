@@ -14,15 +14,7 @@ class LibraryPlaylistViewController: UIViewController {
     }))
     
     private var playlists = [UserPlaylist]()
-    
-//    init(playlists: [Playlist]){
-//        super.init(nibName: nil, bundle: nil)
-//        self.playlists = playlists
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
+    public var selectionHandler: ((UserPlaylist) -> Void)?
     
     override func viewDidLoad(){
         super.viewDidLoad()
@@ -34,6 +26,23 @@ class LibraryPlaylistViewController: UIViewController {
         view.addSubview(collectionView)
         collectionView.delegate = self
         collectionView.dataSource = self
+        
+        APICaller.shared.getCurrentUserPlaylist { [weak self] result in
+            switch result{
+            case .success(let userPlaylists):
+                self?.configure(with: userPlaylists.items)
+            case .failure(_):
+                print("Debug: cannot get user playlists")
+            }
+        }
+        
+        if selectionHandler != nil{
+            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(didTapClose))
+        }
+    }
+    
+    @objc func didTapClose(){
+        dismiss(animated: true)
     }
     
     static func createLayoutSection() -> NSCollectionLayoutSection{
@@ -84,7 +93,10 @@ extension LibraryPlaylistViewController: UICollectionViewDelegate, UICollectionV
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let playlist = playlists[indexPath.row]
         APICaller.shared.getPlaylistTracks(with: playlist.id) {[weak self] result in
-            
+            guard self?.selectionHandler == nil else{
+                self?.selectionHandler!(playlist)
+                return
+            }
             
             DispatchQueue.main.async {
                 let playlist = Playlist(description: playlist.description, external_urls: [:], href: "", id: playlist.id, images: playlist.images, name: playlist.name, owner: playlist.owner, snapshot_id: playlist.snapshot_id, tracks: Tracks(href: "", total: 0), type: "", uri: "")

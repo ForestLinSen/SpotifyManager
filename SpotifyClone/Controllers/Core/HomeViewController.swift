@@ -52,8 +52,58 @@ class HomeViewController: UIViewController{
         layoutCollectionView()
         fetchData()
         fetchUserProfile()
+        addLongTapGesture()
+        
+    }
+    
+    private func addLongTapGesture(){
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress(_:)))
+        collectionView.addGestureRecognizer(gesture)
+    }
+    
+    @objc func didLongPress(_ gesture: UILongPressGestureRecognizer){
+        
+        // avoid gesture triggerd too many times
+        guard gesture.state == .began else{
+            return
+        }
+        
+        let position = gesture.location(in: collectionView)
+        guard let indexPath = collectionView.indexPathForItem(at: position) else { return }
+        
+        if indexPath.section == 2{
+            
+            guard let model = tracks?[indexPath.row] else { return }
+            
+            
+            let sheet = UIAlertController(title: model.name, message: "Do you want to add this track to your playlist?", preferredStyle: .actionSheet)
+            
+            
+            sheet.addAction(UIAlertAction(title: "Add", style: .default, handler: { [weak self] _ in
+                
+                DispatchQueue.main.async {
+                    let vc = LibraryPlaylistViewController()
+                    vc.selectionHandler = {playlist in
+                        APICaller.shared.addTrackToPlaylist(playlistID: playlist.id, trackURI: model.uri) { success in
+                            
+                            DispatchQueue.main.async {
+                                self?.dismiss(animated: true)
+                            }
+                        }
+                    }
+                    
+                    vc.title = "Select a playlist"
+                    self?.present(UINavigationController(rootViewController: vc), animated: true)
+                }
+
+            }))
+            sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+            
+            present(sheet, animated: true)
+        }
         
         
+        print("Debug: long pressed")
     }
     
     override func viewDidLayoutSubviews() {

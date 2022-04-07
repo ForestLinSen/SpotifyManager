@@ -34,15 +34,7 @@ class LibraryViewController: UIViewController {
         addchldren()
         
         
-        APICaller.shared.getCurrentUserPlaylist { [weak self] result in
-            switch result{
-            case .success(let userPlaylists):
-                
-                self?.playlistVC.configure(with: userPlaylists.items)
-            case .failure(_):
-                print("Debug: cannot get user playlists")
-            }
-        }
+
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(addPlaylist))
     }

@@ -22,4 +22,5 @@ struct AudioTrack: Codable{
     let name: String
     let popularity: Int
     let preview_url: String?
+    let uri: String
 }
