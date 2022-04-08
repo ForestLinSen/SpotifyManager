@@ -20,7 +20,7 @@ class PlaylistViewController: UIViewController {
     
     public var isOwner = false
     var pan: UIPanGestureRecognizer?
-    var panPoint: CGPoint?
+    var panPoint: CGPoint = CGPoint(x: 0, y: 0)
     
     private let deleteLabel: UILabel = {
         let label = UILabel()
@@ -93,11 +93,9 @@ class PlaylistViewController: UIViewController {
     @objc func onPan(_ gesture: UIPanGestureRecognizer){
         pan = gesture
         panPoint = pan!.translation(in: collectionView)
-
-        //print("Debug: pan x:\(p?.x)")
         
-        viewDidLayoutSubviews()
 
+        viewDidLayoutSubviews()
     }
     
     @objc func didTapShareButton(){
@@ -113,13 +111,56 @@ class PlaylistViewController: UIViewController {
         collectionView.frame = view.bounds
         
         
+        if let pan = pan {
+            guard let indexPath = collectionView.indexPathForItem(at: pan.location(in: collectionView)) else{ return }
+
+            guard let attribute = collectionView.layoutAttributesForItem(at: indexPath) else{ return }
+
+            let rect = collectionView.convert(attribute.frame, to: view)
+            let point = collectionView.convert(attribute.frame.origin, to: view)
+            let cellHeight = rect.height
+            let cellY = point.y
             
-        //let indexPath = collectionView.indexPathForItem(at: pan?.location(in: collectionView))
+            if panPoint.x < 0{
+                
+                let panWidth = abs(panPoint.x)
+                
+                deleteLabel.frame = CGRect(x: view.frame.width-min(panWidth, 150), y: cellY, width: 150, height: cellHeight)
+                
+                if pan.state == .ended || pan.state == .possible{
+                    
+                    UIView.animate(withDuration: 0.3) { [weak self] in
+                        if panWidth < 50{
+                            self?.deleteLabel.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+                        }else{
+                            self?.deleteLabel.frame = CGRect(x: (self?.view.frame.width ?? 0)-150, y: cellY, width: 150, height: cellHeight)
+                        }
+                    }
 
-        deleteLabel.frame = CGRect(x: 200, y: 200, width: abs(panPoint?.x ?? 0), height: 50)
-        //print("Debug: width \(abs(pan!.translation(in: collectionView).x))")
-
-        print("Debug: pan x:\(panPoint?.x)")
+                }
+            }
+        }
+        
+        
+        if let state = pan?.state{
+            switch state{
+                
+            case .possible:
+                print("possible")
+            case .began:
+                print("began")
+            case .changed:
+                print("changed")
+            case .ended:
+                print("ended")
+            case .cancelled:
+                print("cancelled")
+            case .failed:
+                print("failed")
+            @unknown default:
+                print("default")
+            }
+        }
         
         
         
@@ -172,12 +213,6 @@ extension PlaylistViewController: UICollectionViewDelegate, UICollectionViewData
         
         let viewModel = viewModels[indexPath.row]
         cell.configure(with: viewModel)
-        
-        // swipe to delete
-        if isOwner{
-            
-        }
-        
         
         return cell
     }
