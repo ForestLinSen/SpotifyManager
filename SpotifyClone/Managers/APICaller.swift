@@ -365,11 +365,46 @@ final class APICaller{
                 }catch{
                     print("Debug: something wrong v2 : \(error)")
                 }
+            }
+        }
+    }
+    
+    func deleteTrackFromPlaylist(playlistID: String, trackURI: String, completion: @escaping ((Bool) -> Void)){
+        let requestString = K.baseAPIURL + "playlists/\(playlistID)/tracks"
+        
+        AuthManager.shared.withValideToken {[weak self] token in
+            self?.createRequest(with: URL(string: requestString), type: .DELETE) { request in
+                var request = request
+                request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 
+                // { "tracks": [{ "uri": "spotify:track:4iV5W9uYEdYUVa79Axb7Rh" },{ "uri": "spotify:track:1301WleyT98MSxVHPZCA6M" }] }
+                
+                let json: [String: Any] = [
+                    "tracks": [
+                        ["uri": trackURI]
+                    ]
+                ]
+                
+                do{
+                    let data = try JSONSerialization.data(withJSONObject: json, options: .fragmentsAllowed)
+                    request.httpBody = data
+                    
+                    let task = URLSession.shared.dataTask(with: request) { data, _, error in
+                        guard let data = data, error == nil else{
+                            completion(false)
+                            return
+                        }
+                        
+                        
+                        
+                    }
+                    
+                    task.resume()
+                    
+                }catch{}
                 
             }
-            
-            
         }
     }
     
@@ -467,6 +502,7 @@ final class APICaller{
     enum HTTPMethod: String{
         case GET
         case POST
+        case DELETE
     }
     
     enum APIError: Error{

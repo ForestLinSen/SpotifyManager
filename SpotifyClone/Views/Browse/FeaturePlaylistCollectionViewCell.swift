@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FeaturePlaylistCollectionViewCell: UICollectionViewCell{
+class FeaturePlaylistCollectionViewCell: UICollectionViewListCell{
     static let identifier = "RecommendationTrackCollectionViewCell"
     
     private let playlistNameLabel: UILabel = {

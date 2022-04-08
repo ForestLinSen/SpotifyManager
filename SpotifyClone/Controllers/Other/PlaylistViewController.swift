@@ -13,9 +13,22 @@ class PlaylistViewController: UIViewController {
         PlaylistViewController.createCollectionLayout()
     }))
     
+    
     private var viewModels = [RecommendationCellViewModel]()
     private var headerViewModel: PlaylistHeaderViewModel?
     private var tracks = [AudioTrack]()
+    
+    public var isOwner = false
+    var pan: UIPanGestureRecognizer?
+    var panPoint: CGPoint?
+    
+    private let deleteLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 22, weight: .semibold)
+        label.backgroundColor = .systemRed
+        
+        return label
+    }()
     
     init(playlist: Playlist){
         self.playlist = playlist
@@ -29,6 +42,7 @@ class PlaylistViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        
         
         APICaller.shared.getPlaylistDetail(playlistID: playlist.id) {[weak self] result in
             DispatchQueue.main.async {
@@ -66,6 +80,24 @@ class PlaylistViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action,
                                                             target: self,
                                                             action: #selector(didTapShareButton))
+        
+        addPanGesture()
+        view.addSubview(deleteLabel)
+    }
+    
+    private func addPanGesture(){
+        let gesture = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
+        collectionView.addGestureRecognizer(gesture)
+    }
+    
+    @objc func onPan(_ gesture: UIPanGestureRecognizer){
+        pan = gesture
+        panPoint = pan!.translation(in: collectionView)
+
+        //print("Debug: pan x:\(p?.x)")
+        
+        viewDidLayoutSubviews()
+
     }
     
     @objc func didTapShareButton(){
@@ -79,6 +111,18 @@ class PlaylistViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         collectionView.frame = view.bounds
+        
+        
+            
+        //let indexPath = collectionView.indexPathForItem(at: pan?.location(in: collectionView))
+
+        deleteLabel.frame = CGRect(x: 200, y: 200, width: abs(panPoint?.x ?? 0), height: 50)
+        //print("Debug: width \(abs(pan!.translation(in: collectionView).x))")
+
+        print("Debug: pan x:\(panPoint?.x)")
+        
+        
+        
     }
     
     static func createCollectionLayout() -> NSCollectionLayoutSection{
@@ -128,6 +172,12 @@ extension PlaylistViewController: UICollectionViewDelegate, UICollectionViewData
         
         let viewModel = viewModels[indexPath.row]
         cell.configure(with: viewModel)
+        
+        // swipe to delete
+        if isOwner{
+            
+        }
+        
         
         return cell
     }

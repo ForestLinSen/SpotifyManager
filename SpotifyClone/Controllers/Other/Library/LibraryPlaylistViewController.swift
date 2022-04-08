@@ -39,6 +39,7 @@ class LibraryPlaylistViewController: UIViewController {
         if selectionHandler != nil{
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(didTapClose))
         }
+        
     }
     
     @objc func didTapClose(){
