@@ -370,7 +370,7 @@ final class APICaller{
     }
     
     func deleteTrackFromPlaylist(playlistID: String, trackURI: String, completion: @escaping ((Bool) -> Void)){
-        let requestString = K.baseAPIURL + "playlists/\(playlistID)/tracks"
+        let requestString = K.baseAPIURL + "/playlists/\(playlistID)/tracks"
         
         AuthManager.shared.withValideToken {[weak self] token in
             self?.createRequest(with: URL(string: requestString), type: .DELETE) { request in
@@ -392,9 +392,17 @@ final class APICaller{
                     
                     let task = URLSession.shared.dataTask(with: request) { data, _, error in
                         guard let data = data, error == nil else{
+                            print("Debug: failed to remove the given track")
                             completion(false)
                             return
                         }
+                        
+                        do{
+                            let jsonData = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
+                            completion(true)
+                            print("Debug: remove response: \(jsonData)")
+                        }catch{}
+                        
                         
                         
                         
@@ -402,7 +410,9 @@ final class APICaller{
                     
                     task.resume()
                     
-                }catch{}
+                }catch{
+                    print("Debug: failed to remove track in converting the json data")
+                }
                 
             }
         }

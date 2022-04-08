@@ -7,12 +7,11 @@
 
 import UIKit
 
-class PlaylistViewController: UIViewController {
+class PlaylistViewController: UIViewController, UIGestureRecognizerDelegate {
     private let playlist: Playlist
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewCompositionalLayout(sectionProvider: {sectionIndex, _ in
         PlaylistViewController.createCollectionLayout()
     }))
-    
     
     private var viewModels = [RecommendationCellViewModel]()
     private var headerViewModel: PlaylistHeaderViewModel?
@@ -22,13 +21,16 @@ class PlaylistViewController: UIViewController {
     var pan: UIPanGestureRecognizer?
     var panPoint: CGPoint = CGPoint(x: 0, y: 0)
     
-    private let deleteLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 22, weight: .semibold)
-        label.backgroundColor = .systemRed
+    private let deleteLabel: UIButton = {
         
-        return label
+        let button = UIButton()
+        button.setTitle("Delete", for: .normal)
+        button.backgroundColor = .systemRed
+        
+        return button
     }()
+    
+
     
     init(playlist: Playlist){
         self.playlist = playlist
@@ -81,21 +83,72 @@ class PlaylistViewController: UIViewController {
                                                             target: self,
                                                             action: #selector(didTapShareButton))
         
-        addPanGesture()
+
+        if isOwner{
+            addPanGesture()
+        }
+
         view.addSubview(deleteLabel)
+        
+        deleteLabel.addTarget(self, action: #selector(didTapDeleteButton), for: .touchUpInside)
+    }
+    
+    @objc func didTapDeleteButton(){
+        
+        panPoint = CGPoint(x: -1, y: -1)
+        viewDidLayoutSubviews()
+        
+        guard let location = pan?.location(in: collectionView), let indexPath = collectionView.indexPathForItem(at:location) else{ return }
+        
+        let actionSheet = UIAlertController(title: "Delete", message: "Do you want to delete this track?", preferredStyle: .alert)
+        
+        actionSheet.addAction(UIAlertAction(title: "Delete", style: .default, handler: {[weak self] _ in
+            print("Debug: delete uri: \(self?.tracks[indexPath.row].uri)")
+            
+            guard let uri = self?.tracks[indexPath.row].uri, let id = self?.playlist.id else { return }
+            
+                    APICaller.shared.deleteTrackFromPlaylist(playlistID: id, trackURI: uri) { success in
+                        if(success){
+                            
+                            print("Debug: successfully removed the given data")
+                            DispatchQueue.main.async {
+                                self?.tracks.remove(at: indexPath.row)
+                                self?.viewModels.remove(at: indexPath.row)
+                                self?.collectionView.reloadData()
+                            }
+                            
+                        }
+                    }
+            
+        }))
+        
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        
+        present(actionSheet, animated: true, completion: nil)
+        
+        print("Debug: delete index: \(indexPath.row)")
+        
     }
     
     private func addPanGesture(){
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
         collectionView.addGestureRecognizer(gesture)
+        gesture.delegate = self
+        gesture.maximumNumberOfTouches = 2
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
     
     @objc func onPan(_ gesture: UIPanGestureRecognizer){
         pan = gesture
         panPoint = pan!.translation(in: collectionView)
-        
 
         viewDidLayoutSubviews()
+//        if pan?.velocity(in: collectionView).x ?? 0 > 50{
+//            viewDidLayoutSubviews()
+//        }
     }
     
     @objc func didTapShareButton(){
@@ -111,7 +164,7 @@ class PlaylistViewController: UIViewController {
         collectionView.frame = view.bounds
         
         
-        if let pan = pan {
+        if let pan = pan{
             guard let indexPath = collectionView.indexPathForItem(at: pan.location(in: collectionView)) else{ return }
 
             guard let attribute = collectionView.layoutAttributesForItem(at: indexPath) else{ return }
@@ -121,49 +174,29 @@ class PlaylistViewController: UIViewController {
             let cellHeight = rect.height
             let cellY = point.y
             
-            if panPoint.x < 0{
+            
+            if panPoint.x < -1{
                 
                 let panWidth = abs(panPoint.x)
                 
                 deleteLabel.frame = CGRect(x: view.frame.width-min(panWidth, 150), y: cellY, width: 150, height: cellHeight)
                 
                 if pan.state == .ended || pan.state == .possible{
-                    
-                    UIView.animate(withDuration: 0.3) { [weak self] in
-                        if panWidth < 50{
-                            self?.deleteLabel.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
-                        }else{
-                            self?.deleteLabel.frame = CGRect(x: (self?.view.frame.width ?? 0)-150, y: cellY, width: 150, height: cellHeight)
+                    if panWidth < 50{
+                        self.deleteLabel.frame = CGRect(x: self.view.frame.width, y: cellY, width: 0, height: 0)
+                    }else{
+                        UIView.animate(withDuration: 0.3) { [weak self] in
+                          self?.deleteLabel.frame = CGRect(x: (self?.view.frame.width ?? 0)-150, y: cellY, width: 150, height: cellHeight)
                         }
                     }
+                    
 
                 }
+            }else{
+                deleteLabel.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
             }
         }
-        
-        
-        if let state = pan?.state{
-            switch state{
-                
-            case .possible:
-                print("possible")
-            case .began:
-                print("began")
-            case .changed:
-                print("changed")
-            case .ended:
-                print("ended")
-            case .cancelled:
-                print("cancelled")
-            case .failed:
-                print("failed")
-            @unknown default:
-                print("default")
-            }
-        }
-        
-        
-        
+   
     }
     
     static func createCollectionLayout() -> NSCollectionLayoutSection{
@@ -246,4 +279,26 @@ extension PlaylistViewController: PlaylistHeaderCollectionReusableViewDelegate{
     func didTapPlayAll(_ header: PlaylistHeaderCollectionReusableView) {
         PlaybackPresenter.shared.startPlayback(from: self, tracks: tracks)
     }
+}
+
+
+extension PlaylistViewController: UIScrollViewDelegate{
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if let pan = pan{
+            collectionView.removeGestureRecognizer(pan)
+            
+            panPoint = CGPoint(x: 0, y: 0)
+            viewDidLayoutSubviews()
+        }
+    }
+    
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if isOwner{
+            addPanGesture()
+        }
+        
+    }
+    
 }

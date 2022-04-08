@@ -102,6 +102,7 @@ extension LibraryPlaylistViewController: UICollectionViewDelegate, UICollectionV
             DispatchQueue.main.async {
                 let playlist = Playlist(description: playlist.description, external_urls: [:], href: "", id: playlist.id, images: playlist.images, name: playlist.name, owner: playlist.owner, snapshot_id: playlist.snapshot_id, tracks: Tracks(href: "", total: 0), type: "", uri: "")
                 let vc = PlaylistViewController(playlist: playlist)
+                vc.isOwner = true
                 vc.navigationItem.largeTitleDisplayMode = .never
                 self?.navigationController?.pushViewController(vc, animated: true)
             }
