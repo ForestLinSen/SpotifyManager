@@ -168,7 +168,7 @@ final class APICaller{
     }
     
     
-    // MARK: - Album details
+    // MARK: - Album
     func getAlbumDetail(albumID: String, completion: @escaping (Result<AlbumDetailResponse, Error>) -> Void){
         let requestString = K.baseAPIURL + "/albums/\(albumID)"
         
@@ -198,6 +198,37 @@ final class APICaller{
             
             task.resume()
         }
+    }
+    
+    
+    func getUserSavedAlbums(completion: @escaping (Result<LibraryAlbumsResponse, Error>) -> Void){
+        let requestString = K.baseAPIURL + "/me/albums?limit=5"
+        
+        AuthManager.shared.withValideToken {[weak self] token in
+            self?.createRequest(with: URL(string: requestString), type: .GET) { request in
+                var request = request
+                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+                
+                let task = URLSession.shared.dataTask(with: request) { data, _, error in
+                    guard let data = data, error == nil else {
+                        return
+                    }
+                    
+                    do{
+                        let albums = try JSONDecoder().decode(LibraryAlbumsResponse.self, from: data)
+                        completion(.success(albums))
+                        
+                    }catch{
+                        completion(.failure(APIError.failedToConvertData))
+                    }
+
+                }
+                
+                task.resume()
+            }
+        }
+        
     }
     
     

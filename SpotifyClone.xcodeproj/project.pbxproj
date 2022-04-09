@@ -57,6 +57,7 @@
 		B9D66CDE27FAF98100123F83 /* PlaylistTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D66CDD27FAF98100123F83 /* PlaylistTrack.swift */; };
 		B9D6E3B427F427CD005D9624 /* LibraryPlaylistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D6E3B327F427CD005D9624 /* LibraryPlaylistViewController.swift */; };
 		B9D6E3B627F427E6005D9624 /* LibraryAlbumsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D6E3B527F427E6005D9624 /* LibraryAlbumsViewController.swift */; };
+		B9D7438D280178C800B13FB1 /* LibraryAlbumsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D7438C280178C800B13FB1 /* LibraryAlbumsResponse.swift */; };
 		B9DB95ED27E3844400D1095C /* SearchResultTrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DB95EC27E3844400D1095C /* SearchResultTrackTableViewCell.swift */; };
 		B9E8A55627C4D15A0051D9D5 /* NewReleasesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E8A55527C4D15A0051D9D5 /* NewReleasesResponse.swift */; };
 		B9E8A55827C4EFBF0051D9D5 /* APIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E8A55727C4EFBF0051D9D5 /* APIImage.swift */; };
@@ -119,6 +120,7 @@
 		B9D66CDD27FAF98100123F83 /* PlaylistTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistTrack.swift; sourceTree = "<group>"; };
 		B9D6E3B327F427CD005D9624 /* LibraryPlaylistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPlaylistViewController.swift; sourceTree = "<group>"; };
 		B9D6E3B527F427E6005D9624 /* LibraryAlbumsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryAlbumsViewController.swift; sourceTree = "<group>"; };
+		B9D7438C280178C800B13FB1 /* LibraryAlbumsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryAlbumsResponse.swift; sourceTree = "<group>"; };
 		B9DB95EC27E3844400D1095C /* SearchResultTrackTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultTrackTableViewCell.swift; sourceTree = "<group>"; };
 		B9E8A55527C4D15A0051D9D5 /* NewReleasesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewReleasesResponse.swift; sourceTree = "<group>"; };
 		B9E8A55727C4EFBF0051D9D5 /* APIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIImage.swift; sourceTree = "<group>"; };
@@ -263,6 +265,7 @@
 				B99F1B5927DF0820000A2C24 /* SearchQueryResponse.swift */,
 				B9AC725A27F5DF2400191851 /* UserPlaylistResponse.swift */,
 				B9D66CDD27FAF98100123F83 /* PlaylistTrack.swift */,
+				B9D7438C280178C800B13FB1 /* LibraryAlbumsResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -497,6 +500,7 @@
 				B9C8755427D07819001BC0EC /* AlbumDetailResponse.swift in Sources */,
 				B9C53F9B27BE06C400E4644A /* APICaller.swift in Sources */,
 				B9BA344D27B566B90001C99E /* LibraryViewController.swift in Sources */,
+				B9D7438D280178C800B13FB1 /* LibraryAlbumsResponse.swift in Sources */,
 				B940ECFE27B96AC0006B3332 /* AuthResponse.swift in Sources */,
 				B9345DB927DA40B40057290E /* Extension.swift in Sources */,
 				B9576A1627B63D6E006E49DB /* AuthViewController.swift in Sources */,
