@@ -228,6 +228,36 @@ final class APICaller{
                 task.resume()
             }
         }
+    }
+    
+    
+    func saveAlbum(albumID: String, completion: @escaping (Bool) -> Void){
+        let requestString = K.baseAPIURL + "/me/albums?ids=\(albumID)"
+        
+        AuthManager.shared.withValideToken {[weak self] token in
+            self?.createRequest(with: URL(string: requestString), type: .PUT) { request in
+                var request = request
+                request.setValue("application/json", forHTTPHeaderField: "Accept")
+                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+                
+                let task = URLSession.shared.dataTask(with: request) { data, _, error in
+                    guard let data = data, error == nil else {
+                        print("Debug: cannot save this album")
+                        return
+                    }
+                    
+                    do{
+                        let jsonData = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
+                        print(jsonData)
+                        completion(true)
+                    }catch{}
+
+                }
+                
+                task.resume()
+            }
+        }
         
     }
     
@@ -544,6 +574,7 @@ final class APICaller{
         case GET
         case POST
         case DELETE
+        case PUT
     }
     
     enum APIError: Error{

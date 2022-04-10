@@ -108,6 +108,24 @@ class AlbumViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(saveAlbum))
+        
+    }
+    
+    @objc func saveAlbum(){
+        let alert = UIAlertController(title: "Save Album", message: "Do you want to save this album?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Add", style: .default, handler: { [weak self] _ in
+            
+            APICaller.shared.saveAlbum(albumID: self?.album.id ?? "") { success in
+                if success{
+                    NotificationCenter.default.post(name: .albumSavedNotification, object: nil)
+                }
+            }
+            
+        }))
+        
+        present(alert, animated: true, completion: nil)
     }
     
     override func viewDidLayoutSubviews() {
@@ -166,4 +184,8 @@ extension AlbumViewController: PlaylistHeaderCollectionReusableViewDelegate{
     func didTapPlayAll(_ header: PlaylistHeaderCollectionReusableView) {
         PlaybackPresenter.shared.startPlayback(from: self, tracks: tracks)
     }
+}
+
+extension Notification.Name{
+    static let albumSavedNotification = Notification.Name("albumSavedNotification")
 }

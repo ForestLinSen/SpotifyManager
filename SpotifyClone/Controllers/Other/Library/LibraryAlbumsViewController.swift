@@ -13,6 +13,9 @@ class LibraryAlbumsViewController: UIViewController {
         LibraryAlbumsViewController.createCollectionViewLayout()
     }))
     
+    private var albums = [Album]()
+    private var observer: NSObjectProtocol?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemRed
@@ -24,7 +27,16 @@ class LibraryAlbumsViewController: UIViewController {
         collectionView.dataSource = self
         
         //APICaller.shared.
+        fetchData()
         
+        
+        observer = NotificationCenter.default.addObserver(forName: .albumSavedNotification, object: nil, queue: .main, using: {[weak self] _ in
+            self?.fetchData()
+        })
+    }
+    
+    private func fetchData(){
+        self.albums.removeAll()
         APICaller.shared.getUserSavedAlbums {[weak self] result in
             switch result{
                 
@@ -43,10 +55,9 @@ class LibraryAlbumsViewController: UIViewController {
                 break
             }
         }
-        
     }
     
-    private var albums = [Album]()
+
     
     static func createCollectionViewLayout() -> NSCollectionLayoutSection{
         // item
