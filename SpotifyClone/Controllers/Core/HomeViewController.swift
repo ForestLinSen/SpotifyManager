@@ -68,6 +68,8 @@ class HomeViewController: UIViewController{
             return
         }
         
+        HapticsManager.shared.vibrate(for: .warning)
+        
         let position = gesture.location(in: collectionView)
         guard let indexPath = collectionView.indexPathForItem(at: position) else { return }
         

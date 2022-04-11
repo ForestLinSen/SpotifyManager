@@ -48,9 +48,6 @@ class LibraryAlbumsViewController: UIViewController {
                     })
                     self?.collectionView.reloadData()
                 }
-                
-                
-                
             case .failure(_):
                 break
             }
