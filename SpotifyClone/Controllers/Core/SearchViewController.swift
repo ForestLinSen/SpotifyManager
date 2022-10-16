@@ -37,9 +37,9 @@ class SearchViewController: UIViewController, UISearchResultsUpdating, UISearchB
     
     private var viewModels = [CategoryViewModel]()
     
-    static func createCollectionViewSection() -> NSCollectionLayoutSection{
+    public static func createCollectionViewSection() -> NSCollectionLayoutSection{
         // item
-        let item = NSCollectionLayoutBoundarySupplementaryItem(
+        let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(1.0)))
