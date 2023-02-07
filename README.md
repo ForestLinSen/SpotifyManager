@@ -1,4 +1,4 @@
-# SpotifyClone
+# Spotify Manager
 Log in with your Spotify account to browse and search millions of songs. You can look at and manage your own library in this app and you can also preview many songs within 15 seconds.
 
 Login Page             |  Home Page
